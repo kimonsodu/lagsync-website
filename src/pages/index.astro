@@ -2,13 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import Features from '../components/Features.astro';
+import BrowserLinks from '../components/BrowserLinks.astro'; // Add this
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="LagSync - Fix Bluetooth Audio Delay on Any Video">
-	<main class="bg-slate-950 text-white selection:bg-cyan-500/30">
+<Layout title="LagSync - Perfect Bluetooth Audio Sync for Every Browser">
+	<main>
 		<Hero />
-		<Features />
+		<BrowserLinks /> <Features />
 		<Footer />
 	</main>
 </Layout>

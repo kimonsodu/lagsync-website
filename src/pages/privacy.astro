@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Privacy Policy | LagSync">
+  <main class="pt-32 pb-20">
+    <div class="container mx-auto px-6 max-w-3xl">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-8 font-['Space_Mono'] uppercase tracking-tight">
+        Privacy <span class="text-cyan-500">Policy</span>
+      </h1>
+      
+      <div class="space-y-12 text-slate-400 leading-relaxed font-light">
+        
+        <section>
+          <h2 class="text-xl font-bold text-white mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest border-b border-white/10 pb-2">01. Overview</h2>
+          <p>
+            LagSync is built with a "Privacy First" philosophy. We believe that a utility tool for your browser should do exactly what it says—sync your audio—and nothing else. <strong>We do not collect, store, or sell your data.</strong>
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-white mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest border-b border-white/10 pb-2">02. Data Collection</h2>
+          <p>
+            LagSync does not collect any Personal Identifiable Information (PII). We do not track your browsing history, we do not use cookies, and we do not have a backend server to receive your data.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-white mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest border-b border-white/10 pb-2">03. Permissions</h2>
+          <p class="mb-4">To function, LagSync requires the following permissions:</p>
+          <ul class="list-disc pl-5 space-y-2">
+            <li><code class="text-cyan-400">storage</code>: Used strictly to remember your delay presets and settings locally.</li>
+            <li><code class="text-cyan-400">scripting / all_urls</code>: Used to inject the audio-hooking script into websites containing video players. We only interact with HTML5 media elements.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-white mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest border-b border-white/10 pb-2">04. Local Storage</h2>
+          <p>
+            All configuration data (your custom offsets, toggles, and donation link settings) are stored within your browser's local storage. This data never leaves your device.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-white mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest border-b border-white/10 pb-2">05. Third Parties</h2>
+          <p>
+            Since we do not collect any data, no data is shared with third parties. If you click a donation link provided within the extension (e.g., Ko-fi or PayPal), you will be subject to that specific platform's privacy policy.
+          </p>
+        </section>
+
+        <div class="pt-10 border-t border-white/5">
+          <p class="text-xs font-['Space_Mono'] uppercase tracking-widest">Last Updated: March 2026</p>
+          <a href="/" class="inline-block mt-6 text-cyan-500 hover:text-cyan-400 font-bold transition-colors">
+            &larr; Back to Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

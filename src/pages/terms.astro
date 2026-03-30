@@ -1,0 +1,85 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Terms of Service | LagSync">
+  <main class="pt-32 pb-20">
+    <div class="container mx-auto px-6 max-w-3xl">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-8 font-['Space_Mono'] uppercase tracking-tight">
+        Terms of <span class="text-cyan-500">Service</span>
+      </h1>
+      
+      <p class="text-slate-500 mb-10 font-['Space_Mono'] text-sm uppercase tracking-widest">Effective Date: March 2026</p>
+
+      <div class="space-y-12 text-slate-400 leading-relaxed font-light">
+        
+        <section>
+          <h2 class="text-xl font-bold text-white mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest border-b border-white/10 pb-2">01. Acceptance of Terms</h2>
+          <p>
+            By installing the LagSync browser extension, you agree to be bound by these terms. If you do not agree, please uninstall the extension immediately.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-white mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest border-b border-white/10 pb-2">02. Software License & Anti-Piracy</h2>
+          <p class="mb-4">
+            LagSync grants you a personal, non-exclusive license to use our synchronization engine.
+          </p>
+          <ul class="list-disc pl-5 space-y-2 text-sm italic">
+            <li>You may not modify, reverse engineer, or redistribute the extension files.</li>
+            <li>Sharing "Plus" credentials or using scripts to bypass license checks is strictly prohibited.</li>
+            <li>We reserve the right to revoke access to any user found distributing "cracked" or modified versions of LagSync.</li>
+          </ul>
+        </section>
+
+        <section class="p-8 bg-cyan-500/5 border border-cyan-500/20 rounded-2xl">
+          <h2 class="text-cyan-400 font-['Space_Mono'] mb-4 uppercase text-sm tracking-widest">03. The "Plus" Tier & Legacy Rights</h2>
+          <p class="mb-4 text-white">
+            LagSync may introduce a "Plus" tier for advanced features.
+          </p>
+          <ul class="space-y-4 text-sm">
+            <li><strong>Grandfathering:</strong> Users who installed LagSync before the launch of the Plus tier are identified as "Legacy Users." These users will receive lifetime access to current Plus features for free as a gratitude for early adoption.</li>
+            <li><strong>Verification:</strong> Legacy status is verified via local installation timestamps and/or anonymous device identifiers. Attempting to spoof these identifiers is a violation of these terms.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-bold text-white mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest border-b border-white/10 pb-2">04. Limitation of Liability</h2>
+          <p>
+            LagSync is a tool that interacts with third-party media players (YouTube, Netflix, etc.). We are not responsible for:
+          </p>
+          <ul class="list-disc pl-5 space-y-2 text-sm">
+            <li>Changes in third-party websites that cause the extension to temporarily stop working.</li>
+            <li>Any browser crashes or performance issues related to hardware-accelerated video decoding.</li>
+          </ul>
+          <p class="mt-4 font-bold text-white underline italic">THE SOFTWARE IS PROVIDED "AS IS".</p>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-bold text-white mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest border-b border-white/10 pb-2">05. Third-Party Services & Affiliation</h2>
+            <p class="mb-4">
+                LagSync is an independent project. We are <strong>not</strong> affiliated with, associated with, endorsed by, or in any way officially connected with Google LLC, YouTube, Netflix, Disney+, or any other third-party streaming service mentioned on this site or within the extension.
+            </p>
+            <p class="text-sm italic">
+                All product and company names are trademarks™ or registered® trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them.
+            </p>
+            </section>
+
+            <section>
+            <h2 class="text-xl font-bold text-white mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest border-b border-white/10 pb-2">06. Right to Modify Service</h2>
+            <p>
+                We reserve the right to modify or discontinue, temporarily or permanently, the service (or any part thereof) with or without notice. You agree that LagSync shall not be liable to you or to any third party for any modification, suspension, or discontinuance of the service.
+            </p>
+        </section>
+
+        <div class="pt-10 border-t border-white/5">
+          <a href="/" class="inline-block text-cyan-500 hover:text-cyan-400 font-bold transition-colors">
+            &larr; Back to Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

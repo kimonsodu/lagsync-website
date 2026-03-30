@@ -2,22 +2,22 @@
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="bg-slate-950 border-t border-slate-900 py-12">
+<footer class="bg-[#0a0a0a] border-t border-white/5 py-12">
   <div class="container mx-auto px-6">
     <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-      <div class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-cyan-600 rounded-lg flex items-center justify-center font-bold text-white">L</div>
-        <span class="font-bold text-xl tracking-tight text-white">LagSync</span>
+      <div class="font-['Space_Mono'] font-bold text-xl text-white tracking-tighter">
+        LAG<span class="text-cyan-500">SYNC</span>
       </div>
       
-      <nav class="flex gap-8 text-sm font-medium text-slate-400">
-        <a href="#features" class="hover:text-cyan-400 transition-colors">Features</a>
+      <nav class="flex gap-8 text-[11px] font-['Space_Mono'] uppercase tracking-widest text-slate-500">
+        <a href="/#features" class="hover:text-cyan-400 transition-colors">Features</a>
         <a href="/privacy" class="hover:text-cyan-400 transition-colors">Privacy</a>
+        <a href="/terms" class="hover:text-cyan-400 transition-colors">Terms & License</a>
         <a href="mailto:support@lagsync.com" class="hover:text-cyan-400 transition-colors">Support</a>
       </nav>
       
-      <p class="text-slate-500 text-sm">
-        &copy; {currentYear} LagSync. All rights reserved.
+      <p class="text-slate-600 text-[10px] font-['Space_Mono'] uppercase">
+        &copy; {currentYear} LagSync Project
       </p>
     </div>
   </div>

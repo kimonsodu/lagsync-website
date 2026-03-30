@@ -1,16 +1,35 @@
 ---
-interface Props { title: string; }
-const { title } = Astro.props;
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = "Fix Bluetooth audio lag on any website. Sync audio and video perfectly with LagSync." } = Astro.props;
 ---
+
 <!doctype html>
 <html lang="en" class="scroll-smooth">
 	<head>
 		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
 		<title>{title}</title>
+
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta name="twitter:card" content="summary_large_image" />
 	</head>
-	<body class="bg-slate-950 font-sans antialiased">
+	<body class="bg-[#0d0d0d] text-[#e8e8e8] font-['IBM_Plex_Sans'] antialiased selection:bg-cyan-500/30">
 		<slot />
 	</body>
 </html>
