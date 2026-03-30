@@ -1,0 +1,24 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-slate-950 border-t border-slate-900 py-12">
+  <div class="container mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-cyan-600 rounded-lg flex items-center justify-center font-bold text-white">L</div>
+        <span class="font-bold text-xl tracking-tight text-white">LagSync</span>
+      </div>
+      
+      <nav class="flex gap-8 text-sm font-medium text-slate-400">
+        <a href="#features" class="hover:text-cyan-400 transition-colors">Features</a>
+        <a href="/privacy" class="hover:text-cyan-400 transition-colors">Privacy</a>
+        <a href="mailto:support@lagsync.com" class="hover:text-cyan-400 transition-colors">Support</a>
+      </nav>
+      
+      <p class="text-slate-500 text-sm">
+        &copy; {currentYear} LagSync. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>
