@@ -1,0 +1,106 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Footer from '../../components/Footer.astro';
+
+export function getStaticPaths() {
+  return [
+    { 
+      params: { site: 'youtube' }, 
+      props: { 
+        name: 'YouTube', 
+        color: '#FF0000',
+        tip: 'YouTube often uses high-bitrate AAC. If the lag feels inconsistent, try a fixed preset like 180ms.' 
+      } 
+    },
+    { 
+      params: { site: 'netflix' }, 
+      props: { 
+        name: 'Netflix', 
+        color: '#E50914',
+        tip: 'Netflix uses heavy buffering. If you change the delay, give it 1-2 seconds to "catch up" to the new offset.' 
+      } 
+    },
+    { 
+      params: { site: 'twitch' }, 
+      props: { 
+        name: 'Twitch', 
+        color: '#9146FF',
+        tip: 'For live streams, use the "Low Latency" toggle in the Twitch player settings alongside LagSync.' 
+      } 
+    },
+  ];
+}
+
+const { site } = Astro.params;
+const { name, color, tip } = Astro.props;
+---
+
+<Layout title={`How to Fix ${name} Audio Delay | LagSync Guide`}>
+  <main class="bg-[#080808] text-white">
+    <section class="pt-32 pb-16 relative overflow-hidden">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[400px] blur-[120px] opacity-10" style={`background: ${color}`}></div>
+      
+      <div class="container mx-auto px-6 text-center relative z-10">
+        <div class="inline-block px-4 py-1 rounded-full border border-white/10 bg-white/5 text-xs font-['Space_Mono'] uppercase tracking-widest mb-6">
+          Optimized for {name}
+        </div>
+        <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+          Sync your Audio <br/> on <span style={`color: ${color}`}>{name}</span>
+        </h1>
+        <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+          Bluetooth latency makes {name} impossible to watch. LagSync fixes the delay at the engine level for perfect lip-sync.
+        </p>
+      </div>
+    </section>
+
+    <section class="py-20 border-t border-white/5">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <h2 class="text-3xl font-bold mb-12 font-['Space_Mono'] text-center">Quick Setup Guide</h2>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold mb-6">1</div>
+            <h3 class="font-bold mb-3">Install & Pin</h3>
+            <p class="text-sm text-slate-400">Add LagSync to your browser and pin it to your toolbar for quick access while watching.</p>
+          </div>
+
+          <div class="flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold mb-6">2</div>
+            <h3 class="font-bold mb-3">Play {name}</h3>
+            <p class="text-sm text-slate-400">Open any video on {name}. LagSync will automatically detect the video engine and prepare the hook.</p>
+          </div>
+
+          <div class="flex flex-col items-center text-center">
+            <div class="w-12 h-12 rounded-full bg-white text-black flex items-center justify-center font-bold mb-6">3</div>
+            <h3 class="font-bold mb-3">Slide to Sync</h3>
+            <p class="text-sm text-slate-400">Open the popup and move the slider. Your audio will shift in real-time until it fits the video perfectly. You could also use our built in latency tester.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 bg-white/5">
+      <div class="container mx-auto px-6 max-w-3xl">
+        <div class="p-8 border border-cyan-500/30 rounded-2xl bg-[#0a0a0a]">
+          <h4 class="text-cyan-400 font-['Space_Mono'] uppercase text-xs tracking-widest mb-4">Pro Tip for {name} Users</h4>
+          <p class="text-slate-200 leading-relaxed italic">
+            "{tip}"
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-24 text-center">
+      <div class="container mx-auto px-6">
+        <h2 class="text-3xl font-bold mb-6">Join the Early Adopter Program</h2>
+        <p class="text-slate-400 mb-10 max-w-xl mx-auto">
+          Install LagSync today to lock in <strong>Lifetime Legacy Status</strong>. You'll get all future "Plus" features for free, forever.
+        </p>
+        <a href="#" class="px-12 py-5 bg-white text-black font-bold rounded-full hover:bg-cyan-400 transition-all shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+          Get LagSync for {name}
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
