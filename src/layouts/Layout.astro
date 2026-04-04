@@ -1,5 +1,10 @@
 ---
 import '../styles/global.css';
+import '@fontsource/space-mono/400.css';
+import '@fontsource/space-mono/700.css';
+import '@fontsource/ibm-plex-sans/300.css';
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/600.css';
 
 interface Props {
   title: string;
@@ -20,12 +25,6 @@ const { title, description = "LagSync: The #1 extension to fix Bluetooth audio d
     <link rel="apple-touch-icon" sizes="128x128" href="/icon128.png" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet"></noscript>
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
