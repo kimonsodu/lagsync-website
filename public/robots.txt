@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lagsync.com/sitemap-index.xml
