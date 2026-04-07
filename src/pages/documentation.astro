@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Documentation | LagSync">
+  <main class="pt-32 pb-20 flex-grow">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 font-['Space_Mono'] uppercase tracking-tight">
+        LagSync <span class="text-cyan-500">Documentation</span>
+      </h1>
+      <p class="text-slate-400 mb-12">Quick setup and usage notes for LagSync on Chrome, Brave, and Edge.</p>
+
+      <div class="space-y-8">
+        <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
+          <h2 class="text-white font-bold mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest">Install</h2>
+          <ol class="list-decimal pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Open the Chrome Web Store listing for LagSync.</li>
+            <li>Click <span class="text-white font-semibold">Add to Chrome</span> (also works in Brave and Edge).</li>
+            <li>Pin the extension to your toolbar for fast access while watching video.</li>
+          </ol>
+          <a href="https://chromewebstore.google.com/detail/lagsync-bluetooth-audio-f/ijhhkocgkagcfkoinilkjdcadljdjmaf" target="_blank" rel="noopener noreferrer" class="inline-block mt-6 px-6 py-3 bg-cyan-500 text-black font-bold rounded-lg hover:bg-cyan-400 transition-all">Open Chrome Web Store</a>
+        </section>
+
+        <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
+          <h2 class="text-white font-bold mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest">Basic Usage</h2>
+          <ul class="list-disc pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Play a video on your target site (YouTube, Netflix, Twitch, Prime Video, etc.).</li>
+            <li>Open LagSync and set a delay preset as a starting point.</li>
+            <li>Fine-tune in small steps until lip-sync looks natural.</li>
+            <li>For dialog-focused content, enable Audio Mode when needed.</li>
+          </ul>
+        </section>
+
+        <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
+          <h2 class="text-white font-bold mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest">Keyboard Shortcuts</h2>
+          <p class="text-slate-300 text-sm mb-4">You can adjust sync delay on the fly without opening the popup:</p>
+          <ul class="list-disc pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Enable Keyboard Shortcuts in the LagSync Settings menu.</li>
+            <li>Press <span class="text-white font-semibold">Shift + .</span> (Period) to increase delay.</li>
+            <li>Press <span class="text-white font-semibold">Shift + ,</span> (Comma) to decrease delay.</li>
+          </ul>
+          <p class="text-slate-400 text-sm mt-4">Tip: You can change the jump size (for example 10 ms vs 50 ms) in extension settings.</p>
+        </section>
+
+        <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
+          <h2 class="text-white font-bold mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest">Troubleshooting</h2>
+          <ul class="list-disc pl-5 space-y-3 text-slate-300 text-sm leading-relaxed">
+            <li>
+              <span class="text-white font-semibold">Black Screen or Flickering Video:</span>
+              If a web player goes black or flashes when you enable LagSync, disable Hardware Acceleration in your browser settings and restart the browser.
+            </li>
+            <li>
+              <span class="text-white font-semibold">Drift Over Time:</span>
+              On DRM-heavy sites (like Netflix or Prime), if audio drifts after an hour of watching, pause and seek a few seconds forward/backward to force the player to resync.
+            </li>
+          </ul>
+        </section>
+
+        <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
+          <h2 class="text-white font-bold mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest">Advanced Settings</h2>
+          <ul class="list-disc pl-5 space-y-3 text-slate-300 text-sm leading-relaxed">
+            <li>
+              <span class="text-white font-semibold">Audio Mode vs Video Mode:</span>
+              By default, LagSync delays the video to match lagging Bluetooth audio. Audio Mode flips this behavior natively, which is sometimes required by strict DRM players.
+            </li>
+            <li>
+              <span class="text-white font-semibold">Auto-Settings:</span>
+              When enabled, LagSync automatically detects the best underlying pipeline (MSE vs Canvas) for the specific video player you are watching to prevent errors.
+            </li>
+          </ul>
+        </section>
+
+        <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
+          <h2 class="text-white font-bold mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest">Guides</h2>
+          <p class="text-slate-300 text-sm mb-4">Use per-site guidance for the best results:</p>
+          <div class="grid sm:grid-cols-2 gap-3 text-sm">
+            <a href="/fix/youtube" class="p-3 rounded-lg bg-[#0b0b0b] border border-white/5 hover:border-cyan-500/50 transition-all">YouTube Guide</a>
+            <a href="/fix/netflix" class="p-3 rounded-lg bg-[#0b0b0b] border border-white/5 hover:border-cyan-500/50 transition-all">Netflix Guide</a>
+            <a href="/fix/twitch" class="p-3 rounded-lg bg-[#0b0b0b] border border-white/5 hover:border-cyan-500/50 transition-all">Twitch Guide</a>
+            <a href="/fix/amazon-prime" class="p-3 rounded-lg bg-[#0b0b0b] border border-white/5 hover:border-cyan-500/50 transition-all">Amazon Prime Guide</a>
+          </div>
+        </section>
+
+        <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
+          <h2 class="text-white font-bold mb-4 font-['Space_Mono'] uppercase text-sm tracking-widest">Versioning</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            LagSync currently has two public releases (1.0 and 1.01). This documentation and the changelog will grow over time as new versions are shipped.
+          </p>
+          <a href="/releases" class="inline-block mt-4 text-cyan-400 hover:text-cyan-300 transition-colors">View release changelog &rarr;</a>
+        </section>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Releases & Changelog | LagSync">
+  <main class="pt-32 pb-20 flex-grow">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 font-['Space_Mono'] uppercase tracking-tight">
+        LagSync <span class="text-cyan-500">Releases</span>
+      </h1>
+      <p class="text-slate-400 mb-12">Full changelog for all public versions. New entries will be added here as releases roll out.</p>
+
+      <div class="space-y-8">
+        <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+            <h2 class="text-2xl text-white font-bold font-['Space_Mono']">1.01</h2>
+            <span class="text-xs text-slate-400 font-['Space_Mono'] uppercase tracking-widest">2026-04-06</span>
+          </div>
+          <ul class="list-disc pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Fix: keep Twitch/HUD visible by inserting delayed canvas sibling with z-index 0.</li>
+            <li>Feature: capability-based pipeline selection (MSE vs canvas) instead of host hardcoding.</li>
+            <li>Fix: Firefox Kick compatibility with srcObject detection and rAF + createImageBitmap fallback.</li>
+            <li>Fix: stabilize canvas pipeline to avoid black flashes and ensure setting changes apply reliably.</li>
+            <li>Improvement: generalized "twitch" naming to a generic canvas/live-edge pipeline.</li>
+            <li>Major Update: refactored codebase to TypeScript for stronger type-safety and reliability.</li>
+            <li>Feature: added compatibility for Prime Video.</li>
+          </ul>
+        </section>
+
+        <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+            <h2 class="text-2xl text-white font-bold font-['Space_Mono']">1.0</h2>
+            <span class="text-xs text-slate-400 font-['Space_Mono'] uppercase tracking-widest">2026-04-03</span>
+          </div>
+          <ul class="list-disc pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Initial release.</li>
+            <li>Core lag sync features via MSE.</li>
+            <li>Bluetooth audio delay compensation.</li>
+            <li>Basic audio/video offset controls.</li>
+          </ul>
+        </section>
+      </div>
+
+    </div>
+  </main>
+  <Footer />
+</Layout>

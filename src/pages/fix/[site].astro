@@ -20,11 +20,69 @@ export function getStaticPaths() {
         tip: 'Netflix uses heavy buffering. If you change the delay, give it ~30 seconds to "catch up" to the new offset or reload for instant effect.' 
       } 
     },
+      {
+        params: { site: 'twitch' },
+        props: {
+          name: 'Twitch',
+          color: '#6441A4',
+          tip: 'Twitch uses live HLS streams. If audio drifts during live streams, pause briefly after adjusting the delay or use the built-in latency tester.'
+        }
+      },
+      {
+        params: { site: 'amazon-prime' },
+        props: {
+          name: 'Amazon Prime',
+          color: '#00A8E1',
+          tip: 'Prime Video may buffer aggressively. After changing the offset, allow a few seconds for playback to resync or try reloading.'
+        }
+      },
   ];
 }
 
 const { site } = Astro.params;
 const { name, color, tip } = Astro.props;
+
+const practicalTips = {
+  youtube: {
+    intro: 'YouTube uses adaptive streaming (DASH) and may switch audio codecs or bitrates mid-playback. Those switches can cause brief jitter or perceived sync shifts.',
+    points: [
+      'Lock playback quality in the player (gear → Quality) to avoid mid-stream codec/bitrate swaps.',
+      'Start with a fixed preset around 180 ms and adjust in 20–50 ms increments until lip-sync looks correct.',
+      "For music, podcasts, or dialog-heavy content, enable the extension's Audio Mode so audio timing is prioritized.",
+      "If sync jumps after ads or quality changes, disable the extension's auto-settings so it doesn't re-tune mid-playback.",
+      'For consistent testing, use a short clip with steady audio (no scene cuts) and adjust there.'
+    ]
+  },
+  twitch: {
+    intro: 'Twitch is a live, variable-bitrate platform with frequent scene and overlay changes — this increases the chance of transient desyncs.',
+    points: [
+      'Use a baseline preset of 200–250 ms for live streams; lower values risk underflow when frames drop.',
+      'Use the canvas / live-edge pipeline when available — it is more robust across overlays and dynamic frame updates (may increase CPU usage).',
+      'Force a single player quality if you see stuttering after auto-transcodes.',
+      'Reduce CPU load (hide chat, close background tabs) if stuttering correlates with high CPU usage.'
+    ]
+  },
+  'amazon-prime': {
+    intro: 'Prime Video streams are often DRM-wrapped and use adaptive bitrate. Buffering can be aggressive.',
+    points: [
+      "Use a small buffer or the 'instant' preset to keep audio tight (start near 180 ms and fine-tune).",
+      "Enable Audio Mode for dialog-heavy shows and movies.",
+      'After changing extension settings, reload the player to reinitialize the pipeline — DRM players sometimes re-open media sessions on quality switches.',
+      'If you experience drift during long plays, seek a few seconds forward/back to force a resync.'
+    ]
+  },
+  netflix: {
+    intro: 'Netflix uses DRM-backed adaptive streaming that can switch audio tracks or bitrates during playback.',
+    points: [
+      "Pick a consistent streaming quality in your Netflix account Playback Settings (use 'High' or a fixed setting for testing).",
+      'Start with a fixed preset of 180–220 ms and adjust in small steps until lip-sync is correct.',
+      'If you notice gradual drift over long sessions, try seeking a few seconds or reloading the tab to reinitialize playback.',
+      "Toggle browser hardware acceleration as a troubleshooting step — it can sometimes affect timing on certain GPUs."
+    ]
+  }
+};
+
+const detailed = practicalTips[site];
 ---
 
 <Layout title={`How to Fix ${name} Audio Delay | LagSync Guide`}>
@@ -42,6 +100,11 @@ const { name, color, tip } = Astro.props;
         <p class="text-xl text-slate-400 max-w-2xl mx-auto">
           Bluetooth latency makes {name} impossible to watch. LagSync fixes the delay at the engine level for perfect lip-sync.
         </p>
+        {detailed ? (
+          <p class="text-lg text-slate-300 max-w-2xl mx-auto mt-4">
+            {detailed.intro}
+          </p>
+        ) : null}
       </div>
     </section>
 
@@ -71,26 +134,45 @@ const { name, color, tip } = Astro.props;
       </div>
     </section>
 
-    <section class="py-12 bg-white/5">
-      <div class="container mx-auto px-6 max-w-3xl">
-        <div class="p-8 border border-cyan-500/30 rounded-2xl bg-[#0a0a0a]">
-          <h4 class="text-cyan-400 font-['Space_Mono'] uppercase text-xs tracking-widest mb-4">Pro Tip for {name} Users</h4>
-          <p class="text-slate-200 leading-relaxed italic">
-            "{tip}"
-          </p>
+    {site === 'netflix' ? (
+      <section class="py-12 bg-white/5">
+        <div class="container mx-auto px-6 max-w-3xl">
+          <div class="p-8 border border-cyan-500/30 rounded-2xl bg-[#0a0a0a]">
+            <h4 class="text-cyan-400 font-['Space_Mono'] uppercase text-xs tracking-widest mb-4">Pro Tip for {name} Users</h4>
+            <p class="text-slate-200 leading-relaxed italic">
+              "{tip}"
+            </p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    ) : null}
+
+    {detailed ? (
+      <section class="py-12">
+        <div class="container mx-auto px-6 max-w-4xl">
+          <h2 class="text-3xl font-bold mb-6 font-['Space_Mono'] text-center">Practical Tips</h2>
+          <p class="text-slate-400 mb-4 text-center">{detailed.intro}</p>
+          <div class="max-w-3xl mx-auto text-left text-slate-400">
+            <ul class="list-disc list-inside space-y-3">
+              {detailed.points.map((p) => (
+                <li>{p}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+    ) : null}
 
     <section class="py-24 text-center">
       <div class="container mx-auto px-6">
-        <h2 class="text-3xl font-bold mb-6">Coming Soon</h2>
-        <p class="text-slate-400 mb-10 max-w-xl mx-auto">
-          LagSync v1.0 is on the way. Stay tuned for the official release across all major browsers.
+        <h2 class="text-3xl font-bold mb-6">LagSync v1.01 — Available Now</h2>
+        <p class="text-slate-400 mb-6 max-w-xl mx-auto">
+          LagSync v1.01 is available now on Chrome, Brave, and Edge. Firefox and Safari support coming soon.
         </p>
-        <span class="px-12 py-5 bg-white/10 text-white font-bold rounded-full cursor-default">
-          Launching Soon — It's Free
-        </span>
+        <div class="flex justify-center gap-4">
+          <a href="https://chromewebstore.google.com/detail/lagsync-bluetooth-audio-f/ijhhkocgkagcfkoinilkjdcadljdjmaf" target="_blank" rel="noopener noreferrer" class="px-12 py-5 bg-cyan-500 text-black font-bold rounded-full hover:bg-cyan-400 transition-all">Install now</a>
+          <a href="/fix" class="px-8 py-4 border border-white/10 text-white rounded-full hover:bg-white/5 transition-all">Browse all guides</a>
+        </div>
       </div>
     </section>
   </main>
