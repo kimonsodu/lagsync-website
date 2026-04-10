@@ -1,15 +1,24 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Footer from '../../components/Footer.astro';
+import { execFileSync } from 'child_process';
 
 export function getStaticPaths() {
-  return [
+  let defaultLastUpdated = new Date().toISOString();
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', 'src/pages/fix/[site].astro'], { encoding: 'utf8' }).trim();
+    if (out) defaultLastUpdated = out;
+  } catch (e) {
+    // ignore and keep ISO fallback
+  }
+  const paths = [
     { 
       params: { site: 'youtube' }, 
       props: { 
         name: 'YouTube', 
         color: '#FF0000',
-        tip: 'YouTube often uses high-bitrate AAC. If the lag feels inconsistent, try a fixed preset like 180ms.' 
+        tip: 'YouTube often uses high-bitrate AAC. If the lag feels inconsistent, try a fixed preset like 180ms.',
+        lastUpdated: '2026-04-07'
       } 
     },
     { 
@@ -17,7 +26,8 @@ export function getStaticPaths() {
       props: { 
         name: 'Netflix', 
         color: '#E50914',
-        tip: 'Netflix uses heavy buffering. If you change the delay, give it ~30 seconds to "catch up" to the new offset or reload for instant effect.' 
+        tip: 'Netflix uses heavy buffering. If you change the delay, give it ~30 seconds to "catch up" to the new offset or reload for instant effect.',
+        lastUpdated: '2026-04-07'
       } 
     },
       {
@@ -25,22 +35,32 @@ export function getStaticPaths() {
         props: {
           name: 'Twitch',
           color: '#6441A4',
-          tip: 'Twitch uses live HLS streams. If audio drifts during live streams, pause briefly after adjusting the delay or use the built-in latency tester.'
+          tip: 'Twitch uses live HLS streams. If audio drifts during live streams, pause briefly after adjusting the delay or use the built-in latency tester.',
+          lastUpdated: '2026-04-07'
         }
       },
       {
-        params: { site: 'amazon-prime' },
+        params: { site: 'prime-video' },
         props: {
-          name: 'Amazon Prime',
+          name: 'Prime Video',
           color: '#00A8E1',
-          tip: 'Prime Video may buffer aggressively. After changing the offset, allow a few seconds for playback to resync or try reloading.'
+          tip: 'Prime Video may buffer aggressively. After changing the offset, allow a few seconds for playback to resync or try reloading.',
+          lastUpdated: '2026-04-10'
         }
       },
   ];
-}
+  // Ensure each page has a `lastUpdated` prop; allow manual overrides in the props above.
+  return paths.map(p => ({
+    ...p,
+    props: {
+      ...p.props,
+      lastUpdated: p.props.lastUpdated || defaultLastUpdated
+    }
+  }));
 
-const { site } = Astro.params;
-const { name, color, tip } = Astro.props;
+}
+  const { site } = Astro.params;
+const { name, color, tip, lastUpdated } = Astro.props;
 
 const practicalTips = {
   youtube: {
@@ -62,7 +82,7 @@ const practicalTips = {
       'Reduce CPU load (hide chat, close background tabs) if stuttering correlates with high CPU usage.'
     ]
   },
-  'amazon-prime': {
+  'prime-video': {
     intro: 'Prime Video streams are often DRM-wrapped and use adaptive bitrate. Buffering can be aggressive.',
     points: [
       "Use a small buffer or the 'instant' preset to keep audio tight (start near 180 ms and fine-tune).",
@@ -85,7 +105,10 @@ const practicalTips = {
 const detailed = practicalTips[site];
 ---
 
-<Layout title={`How to Fix ${name} Audio Delay | LagSync Guide`}>
+<Layout
+  title={`How to Fix ${name} Audio Delay | LagSync Guide`}
+  dateModified={lastUpdated}
+>
   <main class="bg-[#080808] text-white flex-grow">
     <section class="pt-32 pb-16 relative overflow-hidden">
       <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[400px] blur-[120px] opacity-10" style={`background: ${color}`}></div>
@@ -101,9 +124,14 @@ const detailed = practicalTips[site];
           Bluetooth latency makes {name} impossible to watch. LagSync fixes the delay at the engine level for perfect lip-sync.
         </p>
         {detailed ? (
-          <p class="text-lg text-slate-300 max-w-2xl mx-auto mt-4">
-            {detailed.intro}
-          </p>
+          <>
+            <p class="text-lg text-slate-300 max-w-2xl mx-auto mt-4">
+              {detailed.intro}
+            </p>
+            {lastUpdated ? (
+              <p class="text-sm text-slate-400 mt-3">Last updated: {new Date(lastUpdated).toLocaleDateString()}</p>
+            ) : null}
+          </>
         ) : null}
       </div>
     </section>

@@ -27,6 +27,27 @@ npm run build
 
 Static output goes to `./dist/`.
 
+## SEO Update Signals
+
+This project now includes the following update visibility signals:
+
+- `sitemap.xml` with explicit `<lastmod>` dates.
+- Structured data (`WebPage` JSON-LD `dateModified`) on guide pages.
+- Visible `Last updated` labels on guide pages.
+- `rss.xml` feed for release/changelog updates.
+- `public/_headers` with `Last-Modified` headers for hosts that support static header files.
+
+### Manual Indexing Steps
+
+1. Open Google Search Console URL Inspection for the updated URL.
+2. Click **Request Indexing** for urgent recrawls.
+
+Optional sitemap ping command:
+
+```bash
+curl "https://www.google.com/ping?sitemap=https://lagsync.com/sitemap.xml"
+```
+
 ## License
 
 All rights reserved.

@@ -9,9 +9,26 @@ import '@fontsource/ibm-plex-sans/latin-400.css';
 interface Props {
   title: string;
   description?: string;
+  dateModified?: string;
 }
 
-const { title, description = "LagSync: The #1 extension to fix Bluetooth audio delay. Compatible with Chrome, Firefox, Edge, and Brave." } = Astro.props;
+const {
+  title,
+  description = "LagSync: The #1 extension to fix Bluetooth audio delay. Compatible with Chrome, Firefox, Edge, and Brave.",
+  dateModified
+} = Astro.props;
+
+const canonicalUrl = Astro.url?.toString();
+const jsonLd = dateModified
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: title,
+      description,
+      url: canonicalUrl,
+      dateModified
+    }
+  : null;
 ---
 
 <!doctype html>
@@ -24,13 +41,18 @@ const { title, description = "LagSync: The #1 extension to fix Bluetooth audio d
     <link rel="icon" type="image/png" sizes="32x32" href="/icon32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="/icon48.png" />
     <link rel="apple-touch-icon" sizes="128x128" href="/icon128.png" />
+    <link rel="alternate" type="application/rss+xml" title="LagSync Releases Feed" href="/rss.xml" />
     <title>{title}</title>
     <meta name="description" content={description} />
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    {canonicalUrl ? <meta property="og:url" content={canonicalUrl} /> : null}
+    {dateModified ? <meta property="article:modified_time" content={dateModified} /> : null}
     <meta name="twitter:card" content="summary_large_image" />
+    {dateModified ? <meta name="dateModified" content={dateModified} /> : null}
+    {jsonLd ? <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} /> : null}
   </head>
   <body class="bg-[#080808] text-slate-200 font-['IBM_Plex_Sans'] antialiased selection:bg-cyan-500/30 min-h-[100dvh] flex flex-col">
     <slot />
