@@ -4,7 +4,7 @@
   <div class="container mx-auto px-6 text-center relative z-10">
     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-xs font-['Space_Mono'] mb-8">
       <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
-      Version 1.01 — Now on Chrome — also available for Brave & Edge
+      Version 1.01 — Compatible with top browsers
     </div>
 
     <h1 class="text-5xl md:text-8xl font-bold mb-6 tracking-tighter text-white">
@@ -29,14 +29,20 @@
         const install = document.getElementById('install-cta');
         if (!install) return;
         const chromeUrl = 'https://chromewebstore.google.com/detail/lagsync-bluetooth-audio-f/ijhhkocgkagcfkoinilkjdcadljdjmaf';
+        const firefoxUrl = 'https://addons.mozilla.org/en-US/firefox/addon/lagsync-bluetooth-audio-fix/';
         const ua = navigator.userAgent || '';
         const isFirefox = /firefox/i.test(ua) && !/seamonkey/i.test(ua);
         const isSafari = /safari/i.test(ua) && !/chrome|chromium|crios|android/i.test(ua);
-        if (isFirefox || isSafari) {
+        if (isSafari) {
           install.textContent = 'Coming soon';
-          install.href = '#download';
+          install.href = '/#download';
           install.removeAttribute('target');
           install.removeAttribute('rel');
+        } else if (isFirefox) {
+          install.textContent = 'Add to Firefox';
+          install.href = firefoxUrl;
+          install.target = '_blank';
+          install.rel = 'noopener noreferrer';
         } else {
           install.textContent = 'Install now';
           install.href = chromeUrl;
