@@ -167,14 +167,41 @@ const detailed = practicalTips[site];
       <div class="container mx-auto px-6">
         <h2 class="text-3xl font-bold mb-6">LagSync v1.01 — Available Now</h2>
         <p class="text-slate-400 mb-6 max-w-xl mx-auto">
-          LagSync v1.01 is available now on Chrome, Brave, and Edge. Firefox and Safari support coming soon.
+          LagSync v1.01 is available now on Chrome, Firefox, Brave, and Edge. Safari support is coming soon.
         </p>
-        <div class="flex justify-center gap-4">
-          <a href="https://chromewebstore.google.com/detail/lagsync-bluetooth-audio-f/ijhhkocgkagcfkoinilkjdcadljdjmaf" target="_blank" rel="noopener noreferrer" class="px-12 py-5 bg-cyan-500 text-black font-bold rounded-full hover:bg-cyan-400 transition-all">Install now</a>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a id="guide-install-cta" href="https://chromewebstore.google.com/detail/lagsync-bluetooth-audio-f/ijhhkocgkagcfkoinilkjdcadljdjmaf" target="_blank" rel="noopener noreferrer" class="px-12 py-5 bg-cyan-500 text-black font-bold rounded-full hover:bg-cyan-400 transition-all">Install now</a>
           <a href="/fix" class="px-8 py-4 border border-white/10 text-white rounded-full hover:bg-white/5 transition-all">Browse all guides</a>
         </div>
       </div>
     </section>
+    <script type="module">
+      (function () {
+        const install = document.getElementById('guide-install-cta');
+        if (!install) return;
+        const chromeUrl = 'https://chromewebstore.google.com/detail/lagsync-bluetooth-audio-f/ijhhkocgkagcfkoinilkjdcadljdjmaf';
+        const firefoxUrl = 'https://addons.mozilla.org/en-US/firefox/addon/lagsync-bluetooth-audio-fix/';
+        const ua = navigator.userAgent || '';
+        const isFirefox = /firefox/i.test(ua) && !/seamonkey/i.test(ua);
+        const isSafari = /safari/i.test(ua) && !/chrome|chromium|crios|android/i.test(ua);
+        if (isSafari) {
+          install.textContent = 'Coming soon';
+          install.href = '/#download';
+          install.removeAttribute('target');
+          install.removeAttribute('rel');
+        } else if (isFirefox) {
+          install.textContent = 'Add to Firefox';
+          install.href = firefoxUrl;
+          install.target = '_blank';
+          install.rel = 'noopener noreferrer';
+        } else {
+          install.textContent = 'Install now';
+          install.href = chromeUrl;
+          install.target = '_blank';
+          install.rel = 'noopener noreferrer';
+        }
+      })();
+    </script>
   </main>
   <Footer />
 </Layout>
