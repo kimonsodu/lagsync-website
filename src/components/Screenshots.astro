@@ -154,13 +154,19 @@ const galleryJson = JSON.stringify(gallery);
 
   <style>
     /* Make marquee full-bleed and lock to 4.9333:1 aspect ratio (screen-wide) */
+    /* Prevent horizontal scroll caused by full-bleed breakout.
+       We add a tiny reduction from 100vw and hide any leftover overflow. */
+    html, body { overflow-x: hidden; }
+
     .ls-breakout {
       position: relative;
-      left: 50%;
-      right: 50%;
-      margin-left: -50vw;
-      margin-right: -50vw;
-      width: 100vw;
+      width: calc(100vw - 1px);
+      max-width: 100vw;
+      /* Use calc-based margins to escape container padding without overflowing */
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      box-sizing: border-box;
+      overflow-x: hidden;
     }
     /* Frame enforcing exact aspect ratio; image fills the frame (full-width wide) */
     .ls-marquee-frame {
