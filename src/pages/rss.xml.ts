@@ -26,7 +26,7 @@ export const GET: APIRoute = () => {
     `  <link>${SITE}/releases</link>\n` +
     `  <description>Release and changelog updates for LagSync.</description>\n` +
     `  <language>en-us</language>\n` +
-    `  <lastBuildDate>Fri, 10 Apr 2026 00:00:00 GMT</lastBuildDate>\n` +
+      `  <lastBuildDate>Sat, 11 Apr 2026 00:00:00 GMT</lastBuildDate>\n` +
     items
       .map(
         (item) =>
