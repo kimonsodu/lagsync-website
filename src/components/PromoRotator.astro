@@ -1,0 +1,69 @@
+---
+const slides = [
+  { src: '/images/Promotile.png', alt: 'LagSync promo tile', caption: 'Install LagSync — Chrome Web Store', link: 'https://chromewebstore.google.com/detail/lagsync-bluetooth-audio-f/ijhhkocgkagcfkoinilkjdcadljdjmaf' },
+  { src: '/images/Screenshot1.png', alt: 'YouTube popup', caption: 'Perfect lip-sync — settings optimized for streaming sites' },
+  { src: '/images/Screenshot2.png', alt: 'Presets closeup', caption: 'Smart headset presets — aptX · AAC · SBC · High' },
+  { src: '/images/Screenshot3.png', alt: 'Privacy header', caption: 'Privacy-first — local processing, no tracking, no ads' }
+];
+
+const slidesJson = JSON.stringify(slides);
+---
+
+<div class="mt-6 flex justify-center">
+  <div class="w-full max-w-3xl bg-[#0b0b0b] border border-white/5 rounded-2xl p-4 flex items-center gap-4">
+    <button id="pr-prev" class="text-white/80 text-2xl px-3 py-2 rounded hover:bg-white/5">‹</button>
+    <a id="pr-link" href={slides[0].link || slides[0].src} target="_blank" rel="noopener noreferrer" class="flex-1">
+      <div class="rounded-lg overflow-hidden bg-[#050505] flex items-center justify-center" style="min-height:200px;">
+        <img id="pr-img" src={slides[0].src} alt={slides[0].alt} class="max-h-[420px] w-auto max-w-full object-contain" loading="lazy" />
+      </div>
+      <div id="pr-caption" class="mt-2 text-slate-400 text-center text-sm">{slides[0].caption}</div>
+    </a>
+    <button id="pr-next" class="text-white/80 text-2xl px-3 py-2 rounded hover:bg-white/5">›</button>
+  </div>
+</div>
+
+<script type="application/json" id="pr-data" set:html={slidesJson}></script>
+<script>
+  (function(){
+    const dataEl = document.getElementById('pr-data');
+    const slides = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+    window.__PR_SLIDES = slides;
+    let __PR_INDEX = 0;
+
+    function el(id){ return document.getElementById(id); }
+    const imgEl = el('pr-img');
+    const capEl = el('pr-caption');
+    const linkEl = el('pr-link');
+    const nextBtn = el('pr-next');
+    const prevBtn = el('pr-prev');
+
+    if (!imgEl || !capEl || !linkEl) return;
+
+    function render(i){
+      const s = slides[i];
+      if (!s) return;
+      imgEl.src = s.src;
+      imgEl.alt = s.alt || '';
+      capEl.textContent = s.caption || '';
+      linkEl.href = s.link || s.src;
+    }
+
+    function next(){ __PR_INDEX = (__PR_INDEX + 1) % slides.length; render(__PR_INDEX); }
+    function prev(){ __PR_INDEX = (__PR_INDEX - 1 + slides.length) % slides.length; render(__PR_INDEX); }
+
+    nextBtn?.addEventListener('click', () => { next(); resetTimer(); });
+    prevBtn?.addEventListener('click', () => { prev(); resetTimer(); });
+
+    let timer = setInterval(next, 5000);
+    function resetTimer(){ clearInterval(timer); timer = setInterval(next, 5000); }
+
+    // Pause on hover
+    const container = imgEl.closest('div');
+    if (container) {
+      container.addEventListener('mouseenter', () => clearInterval(timer));
+      container.addEventListener('mouseleave', () => { resetTimer(); });
+    }
+
+    render(0);
+  })();
+</script>

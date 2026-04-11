@@ -10,12 +10,14 @@ interface Props {
   title: string;
   description?: string;
   dateModified?: string;
+  image?: string;
 }
 
 const {
   title,
   description = "LagSync: The #1 extension to fix Bluetooth audio delay. Compatible with Chrome, Firefox, Edge, and Brave.",
-  dateModified
+  dateModified,
+  image = '/images/marquee.png'
 } = Astro.props;
 
 const canonicalUrl = Astro.url?.toString();
@@ -26,7 +28,8 @@ const jsonLd = dateModified
       name: title,
       description,
       url: canonicalUrl,
-      dateModified
+      dateModified,
+      ...(image ? { image } : {})
     }
   : null;
 ---
@@ -48,7 +51,9 @@ const jsonLd = dateModified
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content={image} />
     {canonicalUrl ? <meta property="og:url" content={canonicalUrl} /> : null}
+    <meta name="twitter:image" content={image} />
     {dateModified ? <meta property="article:modified_time" content={dateModified} /> : null}
     <meta name="twitter:card" content="summary_large_image" />
     {dateModified ? <meta name="dateModified" content={dateModified} /> : null}
