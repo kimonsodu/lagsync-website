@@ -103,11 +103,23 @@ const practicalTips = {
 };
 
 const detailed = practicalTips[site];
+
+function truncate(str, max = 155) {
+  if (!str) return str;
+  return str.length > max ? str.slice(0, max - 1) + '…' : str;
+}
+
+const description = (() => {
+  const base = tip || (detailed && detailed.intro) || `Fix Bluetooth audio delay on ${name} with LagSync.`;
+  return truncate(`${name} guide — ${base}`);
+})();
+
 ---
 
 <Layout
   title={`How to Fix ${name} Audio Delay | LagSync Guide`}
   dateModified={lastUpdated}
+  description={description}
 >
   <main class="bg-[#080808] text-white flex-grow">
     <section class="pt-32 pb-16 relative overflow-hidden">
