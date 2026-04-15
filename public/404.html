@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>404 — Page not found — LagSync</title>
+    <link rel="icon" href="/favicon.ico" />
+    <style>
+      :root{--bg:#080808;--muted:#94a3b8;--text:#e6eef2;--accent:#06b6d4}
+      html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:IBM Plex Sans, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+      /* Use viewport-based min-height and extra padding so content centers reliably
+        across desktop and mobile (handles mobile UI/toolbars better than 100%). */
+      .wrap{min-height:100dvh;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:64px 24px;box-sizing:border-box}
+      .card{max-width:720px;text-align:center}
+      h1{font-size:4.25rem;margin:0 0 0.25rem;color:#fff}
+      h2{font-size:1.25rem;color:var(--text);margin:0 0 1rem}
+      p{color:var(--muted);margin:0 0 1.25rem}
+      a.btn{display:inline-block;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:600}
+      a.primary{background:var(--accent);color:#000;margin-right:8px}
+      a.ghost{border:1px solid rgba(255,255,255,0.06);color:var(--text)}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="card">
+        <h1>404</h1>
+        <h2>Page not found</h2>
+        <p>We couldn't find the page you're looking for. Try the homepage, documentation, or releases.</p>
+        <p>
+          <a class="btn primary" href="/">Home</a>
+          <a class="btn ghost" href="/documentation">Documentation</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

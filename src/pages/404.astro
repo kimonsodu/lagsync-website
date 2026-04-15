@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+
+const title = '404 — Page not found';
+const description = "We couldn't find the page you're looking for.";
+---
+
+<Layout title={title} description={description}>
+  <main class="flex-grow bg-[#080808]">
+    <div class="container mx-auto px-6 py-28 flex-1 flex items-center justify-center">
+      <div class="max-w-2xl text-center">
+        <h1 class="text-6xl sm:text-7xl font-bold text-white mb-4">404</h1>
+        <h2 class="text-2xl text-slate-200 mb-4">Page not found</h2>
+        <p class="text-slate-400 mb-6">We couldn't find the page you're looking for. Try the homepage, documentation, or releases.</p>
+        <div class="flex gap-3 justify-center">
+          <a href="/" class="bg-cyan-500 text-black px-4 py-2 rounded font-semibold">Home</a>
+          <a href="/documentation" class="border border-white/10 text-slate-200 px-4 py-2 rounded">Documentation</a>
+          <a href="/releases" class="border border-white/10 text-slate-200 px-4 py-2 rounded">Releases</a>
+        </div>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
