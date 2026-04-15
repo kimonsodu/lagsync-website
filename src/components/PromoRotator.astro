@@ -9,16 +9,16 @@ const slides = [
 const slidesJson = JSON.stringify(slides);
 ---
 
-<div class="mt-6 flex justify-center">
-  <div class="w-full max-w-3xl bg-[#0b0b0b] border border-white/5 rounded-2xl p-4 flex items-center gap-4">
-    <button id="pr-prev" class="text-white/80 text-2xl px-3 py-2 rounded hover:bg-white/5">‹</button>
-    <a id="pr-link" href={slides[0].link || slides[0].src} target="_blank" rel="noopener noreferrer" class="flex-1">
+<div class="mt-6 flex justify-center px-2 sm:px-4">
+  <div class="w-full max-w-3xl bg-[#0b0b0b] border border-white/5 rounded-2xl p-2 sm:p-4 flex items-center gap-2 sm:gap-4">
+    <button id="pr-prev" class="text-white/80 text-xl sm:text-2xl px-2 sm:px-3 py-2 rounded hover:bg-white/5 flex-shrink-0">‹</button>
+    <a id="pr-link" href={slides[0].link || slides[0].src} target="_blank" rel="noopener noreferrer" class="flex-1 min-w-0">
       <div class="rounded-lg overflow-hidden bg-[#050505] flex items-center justify-center pr-frame">
         <img id="pr-img" src={slides[0].src} alt={slides[0].alt} class="w-full h-full object-contain" loading="lazy" />
       </div>
-      <div id="pr-caption" class="mt-2 text-slate-400 text-center text-sm">{slides[0].caption}</div>
+      <div id="pr-caption" class="mt-2 text-slate-400 text-center text-xs sm:text-sm">{slides[0].caption}</div>
     </a>
-    <button id="pr-next" class="text-white/80 text-2xl px-3 py-2 rounded hover:bg-white/5">›</button>
+    <button id="pr-next" class="text-white/80 text-xl sm:text-2xl px-2 sm:px-3 py-2 rounded hover:bg-white/5 flex-shrink-0">›</button>
   </div>
 </div>
 

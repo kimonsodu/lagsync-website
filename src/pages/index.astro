@@ -1,15 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { SITE } from '../config';
 import Hero from '../components/Hero.astro';
 import Features from '../components/Features.astro';
-import BrowserLinks from '../components/BrowserLinks.astro'; // Add this
+import BrowserLinks from '../components/BrowserLinks.astro';
 import Screenshots from '../components/Screenshots.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="LagSync - Perfect Bluetooth Audio Sync for Every Browser"
-		description="Fix Bluetooth audio delay with LagSync — a lightweight browser extension for Chrome, Firefox, Edge, and Brave that restores lip-sync quickly."
-		image="/images/marquee.png">
+<Layout title={SITE.title}
+		description={SITE.description}
+		image={SITE.image}>
 	<main class="flex-grow bg-[#080808]">
 		<Hero />
 		<BrowserLinks />

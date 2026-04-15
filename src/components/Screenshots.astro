@@ -1,15 +1,8 @@
 ---
-const images = [
-  { src: '/images/marquee.png', alt: 'LagSync marquee banner', caption: 'Marquee banner', type: 'marquee' },
-  { src: '/images/Promotile.png', alt: 'LagSync promo tile', caption: 'Promotional tile — Install now', type: 'promo' },
-  { src: '/images/Screenshot1.png', alt: 'YouTube popup', caption: 'Perfect lip-sync — settings optimized for streaming sites' },
-  { src: '/images/Screenshot2.png', alt: 'Presets closeup', caption: 'Smart headset presets — aptX · AAC · SBC · High' },
-  { src: '/images/Screenshot3.png', alt: 'Privacy header', caption: 'Privacy-first — local processing, no tracking, no ads' },
-  { src: '/images/Screenshot4.png', alt: 'Compatibility', caption: 'Universal compatibility — sync audio on any website' }
-];
+import { SCREENSHOTS } from '../config';
 
-const marquee = images.find(i => i.type === 'marquee');
-const gallery = images.filter(i => i.type !== 'marquee');
+const marquee = SCREENSHOTS.find(i => i.type === 'marquee');
+const gallery = SCREENSHOTS.filter(i => i.type !== 'marquee');
 const galleryJson = JSON.stringify(gallery);
 ---
 
