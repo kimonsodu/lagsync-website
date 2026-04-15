@@ -15,8 +15,8 @@ const slidesJson = JSON.stringify(slides);
     <a id="pr-link" href={slides[0].link || slides[0].src} target="_blank" rel="noopener noreferrer" class="flex-1 min-w-0">
       <div class="rounded-lg overflow-hidden bg-[#050505] flex items-center justify-center pr-frame">
         <img id="pr-img" src={slides[0].src} alt={slides[0].alt} class="w-full h-full object-contain" loading="lazy" />
+        <div id="pr-caption" class="pr-caption">{slides[0].caption}</div>
       </div>
-      <div id="pr-caption" class="mt-2 text-slate-400 text-center text-xs sm:text-sm">{slides[0].caption}</div>
     </a>
     <button id="pr-next" class="text-white/80 text-xl sm:text-2xl px-2 sm:px-3 py-2 rounded hover:bg-white/5 flex-shrink-0">›</button>
   </div>
@@ -77,6 +77,7 @@ const slidesJson = JSON.stringify(slides);
     max-height: 420px;
     display: block;
     background: #050505;
+    position: relative;
   }
   .pr-frame img#pr-img {
     width: 100%;
@@ -84,5 +85,20 @@ const slidesJson = JSON.stringify(slides);
     object-fit: contain;
     object-position: center;
     display: block;
+  }
+  .pr-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.4rem 0.6rem;
+    color: #94a3b8; /* slate-400 */
+    font-size: 0.8125rem; /* text-xs */
+    text-align: center;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.45) 100%);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
 </style>
