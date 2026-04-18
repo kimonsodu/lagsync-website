@@ -22,3 +22,11 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local documentation (not published)
+docs/
+
+# local workspace/tooling settings
+.vscode/
+.claude/
+
