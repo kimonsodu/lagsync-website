@@ -1,4 +1,20 @@
-from crewai import Agent, Task, Crew
+"""Run a CrewAI review against this Astro project.
+
+Environment note:
+- Default Python environment is the shared uv environment in C:/Users/simon/Documents/dev.
+- Do not create a new virtual environment for this script.
+- The shared uv environment already has crewai installed.
+- Recommended command: uv run python run_agents.py
+"""
+
+try:
+    from crewai import Agent, Task, Crew
+except ModuleNotFoundError as exc:
+    raise SystemExit(
+        "Missing 'crewai'. Use the shared uv environment in C:/Users/simon/Documents/dev "
+        "(do not create a new virtual environment), then run: uv run python run_agents.py"
+    ) from exc
+
 import os
 from pathlib import Path
 
