@@ -1,0 +1,65 @@
+lagsync-website/
+├── astro.config.mjs
+├── package.json
+├── package-lock.json
+├── README.md
+├── run_agents.py
+├── .gitignore
+├── tsconfig.json
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
+├── public/
+│   ├── _headers
+│   ├── 404.html
+│   ├── CNAME
+│   ├── favicon.ico
+│   ├── favicon.svg
+│   ├── icon16.png
+│   ├── icon32.png
+│   ├── icon48.png
+│   ├── icon128.png
+│   ├── robots.txt
+│   ├── browsers/
+│   │   ├── edge.svg
+│   │   ├── chrome.svg
+│   │   ├── brave.svg
+│   │   ├── firefox.svg
+│   │   └── safari.svg
+│   └── images/
+│       ├── marquee.png
+│       ├── Promotile.png
+│       ├── Screenshot1.png
+│       ├── Screenshot2.png
+│       ├── Screenshot3.png
+│       └── Screenshot4.png
+└── src/
+    ├── config.ts
+    ├── styles/
+    │   └── global.css
+    ├── layouts/
+    │   └── Layout.astro
+    ├── components/
+    │   ├── BrowserLinks.astro
+    │   ├── Features.astro
+    │   ├── Footer.astro
+    │   ├── Hero.astro
+    │   ├── PromoRotator.astro
+    │   └── Screenshots.astro
+    └── pages/
+        ├── 404.astro
+        ├── documentation.astro
+        ├── donate.astro
+        ├── fix/
+        │   ├── [site].astro
+        │   └── index.astro
+        ├── help.astro
+        ├── index.astro
+        ├── privacy.astro
+        ├── releases.astro
+        ├── rss.xml.ts
+        ├── sitemap.xml.ts
+        ├── terms.astro
+        └── thank-you.astro
+
+# Generated: 2026-04-23
