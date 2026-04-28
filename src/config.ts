@@ -10,7 +10,7 @@ export const SITE = {
   url: 'https://lagsync.com',
 };
 
-export const VERSION = '1.01';
+export const VERSION = '1.2.1';
 
 export const BROWSERS = [
   {
@@ -28,7 +28,7 @@ export const BROWSERS = [
   {
     name: 'Edge',
     icon: '/browsers/edge.svg',
-    note: 'v1.2.1 — Live',
+    note: `v${VERSION} — Live`,
     link: 'https://microsoftedge.microsoft.com/addons/detail/lagsync-bluetooth-audio/ocigopodjjobggdnklngfaceeedlkbol',
   },
   {
