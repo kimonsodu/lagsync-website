@@ -3,9 +3,9 @@ import type { APIRoute } from 'astro';
 const SITE = 'https://lagsync.com';
 
 const routes: Array<{ path: string; lastmod: string }> = [
-  { path: '/', lastmod: '2026-04-11' },
+  { path: '/', lastmod: '2026-04-28' },
   { path: '/documentation', lastmod: '2026-04-07' },
-  { path: '/help', lastmod: '2026-04-03' },
+  { path: '/help', lastmod: '2026-04-28' },
   { path: '/releases', lastmod: '2026-04-28' },
   { path: '/donate', lastmod: '2026-04-06' },
   { path: '/privacy', lastmod: '2026-04-03' },
