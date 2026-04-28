@@ -12,18 +12,76 @@ import Footer from '../components/Footer.astro';
 
       <div class="grid gap-6">
         <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">The sync works, but then drifts over time?</h3>
-          <p class="text-sm text-slate-400">This is common with long-form content. LagSync v1.0 will include logic that attempts to re-align the buffer every 1.5 seconds. If it drifts, try toggling the extension Off and On to reset the MSE hook.</p>
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">What's a sane starting delay value?</h3>
+          <p class="text-sm text-slate-400">For Bluetooth, 150–250 ms is typical. AAC headphones (AirPods, most phones) usually land near 150–220 ms; aptX/LDAC closer to 80–150 ms; aptX Low Latency or LE Audio 40–80 ms; cheap USB BT dongles or multipoint can need 300–400 ms. Start at 180 ms and adjust in 20–50 ms steps — 20 ms is roughly the human threshold for noticing.</p>
         </div>
 
         <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Does it work with Disney+ or Prime Video?</h3>
-          <p class="text-sm text-slate-400">Yes. As long as the site uses standard HTML5 Video or MediaSource Extensions (MSE), LagSync can intercept the audio stream.</p>
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Nothing happens when I move the slider</h3>
+          <p class="text-sm text-slate-400">Walk through these in order: (1) the big toggle at the top of the popup must be on; (2) check Site Mode in Settings — <em>Only listed</em> / <em>Exclude listed</em> can keep LagSync out of the page; (3) reload the tab after enabling, since hooks install at <code class="text-cyan-400">document_start</code>; (4) iframe players intentionally disable trim. If <code class="text-cyan-400">mode: none</code> appears in stats view, the page exposes no pipeline LagSync can hook.</p>
         </div>
 
         <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">I see "No video detected" in the popup.</h3>
-          <p class="text-sm text-slate-400">Ensure the video has actually started playing. Some players hide the <code class="text-cyan-400">&lt;video&gt;</code> element until the first frame is loaded. Refreshing the page usually solves this.</p>
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Why does the popup say "Starts adjusting in ~Xs"?</h3>
+          <p class="text-sm text-slate-400">For <em>increases</em>, LagSync waits for already-buffered video to drain (or trims it, when allowed) before the new delayed segments reach the player. The countdown estimates when the new delay first becomes audible. <strong>Decreases and turning off are immediate.</strong> Trim-blocked sites (Netflix, Prime, no-DVR live, iframes) can't shorten the wait — only the buffer drain controls when it begins.</p>
+        </div>
+
+        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Stuttering or rebuffering after changing delay</h3>
+          <p class="text-sm text-slate-400">Drop one step in <strong>Delay increase speed</strong> (Instant → Fast → Balanced → Gentle), or raise <strong>Max buffer ahead</strong> to 10s/20s. Lock the player's quality during testing — adaptive bitrate switches mid-ramp look like a LagSync stutter but aren't. On Prime, Instant mode is intentionally a single hard-jump and may briefly stall once. If hardware acceleration is off, frame capture (canvas) will be CPU-heavy — re-enable it.</p>
+        </div>
+
+        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Sync drifts over long playback</h3>
+          <p class="text-sm text-slate-400">Adaptive streams sometimes switch audio codecs (Opus ↔ AAC on YouTube) or bitrates mid-playback, and the new track lines up slightly differently. Pin the player's quality in the gear menu so it doesn't re-pick mid-stream, or seek a few seconds back and forward to force the player to reinitialise. For Netflix, set a fixed quality in <em>Account → Playback settings</em>.</p>
+        </div>
+
+        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">CPU shoots up when LagSync is on</h3>
+          <p class="text-sm text-slate-400">You're on the canvas pipeline (Twitch live, YouTube no-DVR live, Firefox blob streams, or any page that fell back to frame capture). Canvas redraws every frame and is more expensive than MSE. Lower the player resolution, hide chat, close background tabs, and confirm browser hardware acceleration is on.</p>
+        </div>
+
+        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Does it work on Netflix, Prime Video, Disney+?</h3>
+          <p class="text-sm text-slate-400">Yes. These are DRM and trim is blocked, so increases only kick in once the existing buffer drains. Start near 180 ms. On Prime, Auto-optimize sets <strong>Instant + 0s buffer</strong> — Prime's player rebuffers when offsets ramp, so a single hard jump is the only reliable path. Set a fixed streaming quality in your account settings to reduce drift, and reload the player after changing extension settings.</p>
+        </div>
+
+        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">YouTube live vs Twitch / Kick</h3>
+          <p class="text-sm text-slate-400"><strong>YouTube live with DVR</strong> behaves like VOD (MSE, trim allowed). <strong>No-DVR live</strong> uses the canvas pipeline — higher CPU is expected, and trim is blocked. <strong>Twitch and Kick</strong> are blob-backed live: worker-MSE on Chrome, canvas on Edge/Firefox by design. Use a 200–250 ms baseline for live, lock to a fixed quality, and hide chat if CPU is the bottleneck.</p>
+        </div>
+
+        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Negative delay (audio-ahead) doesn't work on this site</h3>
+          <p class="text-sm text-slate-400">Negative delay uses the <strong>WebAudio</strong> path. Some DRM players don't let WebAudio tap the audio (encrypted media exception). On those, you can apply negative video delay only via the canvas pipeline if it's available — and on a few DRM live players, neither path works. Most common on Prime live events, Apple TV+ on certain Macs, and some regional broadcasters.</p>
+        </div>
+
+        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">When should I use Audio mode?</h3>
+          <p class="text-sm text-slate-400">Turn it on when <strong>audio arrives early</strong> instead of late — common with HDMI ARC/eARC soundbars, receivers with their own processing buffer, or Bluetooth transmitters that over-compensate. Video and audio delay values are stored separately, so toggling Audio mode doesn't lose your other number. Presets are kept in two lists in Settings.</p>
+        </div>
+
+        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Browser-specific quirks (Edge, Firefox, Safari)</h3>
+          <p class="text-sm text-slate-400"><strong>Edge:</strong> if you ever see zero delay across every site after an update, disable/re-enable the extension and reload the tab. Twitch on Edge runs on the canvas pipeline by design. <strong>Firefox:</strong> some builds lack <code class="text-cyan-400">requestVideoFrameCallback</code> and fall back to ~30 fps — slightly choppier on canvas, not a bug. <strong>Safari:</strong> <code class="text-cyan-400">OfflineAudioContext</code> isn't available on every build, which limits negative-delay. Positive video delay still works.</p>
+        </div>
+
+        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Keyboard shortcuts don't fire</h3>
+          <p class="text-sm text-slate-400">"Enable shortcuts" must be on in Settings → Keyboard shortcuts. Click into the input field, then press the actual combo (e.g. <code class="text-cyan-400">Ctrl+Shift+ArrowUp</code>). Some sites swallow keystrokes inside their player when it has focus — click outside the player frame and try again. Step size is in milliseconds (1–200); default 10 is a reasonable start.</p>
+        </div>
+
+        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Privacy — what data does LagSync collect?</h3>
+          <p class="text-sm text-slate-400">None is sent anywhere. Stats (total sync time, session count, top sites, delay distribution) are stored <strong>locally on this device only</strong>. No telemetry, no account, no server. Turn it off in Settings → Privacy — pause-only (keep existing data) or pause-and-delete. Clearing browser data for the extension also clears stats.</p>
+        </div>
+
+        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
+          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">How do I file a useful bug report?</h3>
+          <p class="text-sm text-slate-400">Include browser + version, OS, site and content type (e.g. "Twitch live, no DVR"), what you expected vs what happened, and whether a tab reload reproduces it. Then run the diagnose dump in the page console on the affected tab:</p>
+          <pre class="mt-3 p-3 bg-black/50 border border-white/5 rounded text-xs text-slate-300 overflow-x-auto"><code>window.dispatchEvent(new CustomEvent('__btSyncCmd', &lbrace; detail: JSON.stringify(&lbrace; type: 'DIAGNOSE', msgId: 1 &rbrace;) &rbrace;));
+window.addEventListener('__btSyncResp', e =&gt; console.log(JSON.parse(JSON.stringify(e.detail))), &lbrace; once: true &rbrace;);</code></pre>
+          <p class="text-sm text-slate-400 mt-3">The <code class="text-cyan-400">mode</code> field (<code class="text-cyan-400">canvas</code> / <code class="text-cyan-400">mse</code> / <code class="text-cyan-400">webaudio</code> / <code class="text-cyan-400">none</code>) tells us which pipeline picked you.</p>
         </div>
       </div>
 

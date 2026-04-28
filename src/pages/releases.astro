@@ -14,6 +14,50 @@ import Footer from '../components/Footer.astro';
 
       <div class="space-y-8">
         <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
+          <div id="v121" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+            <h2 class="text-2xl text-white font-bold font-['Space_Mono']">1.2.1</h2>
+            <span class="text-xs text-slate-400 font-['Space_Mono'] uppercase tracking-widest">2026-04-28</span>
+          </div>
+
+          <h3 class="text-lg text-white font-semibold font-['Space_Mono'] mt-2 mb-3">Privacy</h3>
+          <ul class="list-disc pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Feature: Added a "Turn off and pause usage stats" toggle in Settings → Privacy. Default is on. Stats are stored locally on this device only — they are never sent anywhere.</li>
+            <li>Feature: Turning the toggle off opens a confirmation prompt with three choices: Cancel, Pause only (keep existing stats), or Pause &amp; delete (clear all stored stats).</li>
+            <li>Improvement: While paused, the Stats page hides all content and shows a "Usage stats are paused" message with a "Resume usage stats" shortcut. The background heartbeat skips recording entirely while paused, so nothing accumulates.</li>
+          </ul>
+
+          <h3 class="text-lg text-white font-semibold font-['Space_Mono'] mt-6 mb-3">Edge support</h3>
+          <ul class="list-disc pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Fix: Delay now applies on all sites in Microsoft Edge. Some Edge builds don't reliably run manifest <code class="text-cyan-400">world: "MAIN"</code> content scripts at <code class="text-cyan-400">document_start</code>, silently leaving the MSE/WebAudio/canvas hooks uninstalled. <code class="text-cyan-400">page_script.js</code> is now also injected from the content script (with a double-init guard) so the hooks install on every Edge build.</li>
+            <li>Fix: Twitch (and other blob-backed live streams) now uses the frame-capture canvas pipeline on Edge, matching Firefox. The worker-MSE timestamp-offset path that works on Chrome did not produce a visible delay on Edge for these streams.</li>
+          </ul>
+
+          <h3 class="text-lg text-white font-semibold font-['Space_Mono'] mt-6 mb-3">Sync engine and stability</h3>
+          <ul class="list-disc pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Fix: Prime Video Instant mode now applies as a single hard jump instead of burst steps. Prime's player was rebuffering on the ramped bursts; a single jump avoids the stall while still being instant.</li>
+            <li>Fix: Twitch startup regression when LagSync is already enabled at page load. Worker/live-edge config is now refreshed automatically on startup, so delay applies without requiring a manual toggle.</li>
+            <li>Fix: Reduced startup stutter on Twitch/Edge by avoiding unnecessary WebAudio hooking in positive-delay mode.</li>
+            <li>Improvement: Instant increase mode uses safer near-instant burst behavior in no-trim contexts to reduce boundary-time stalls/rebuffering (except on Prime, see above).</li>
+            <li>Improvement: YouTube Instant mode uses near-instant burst stepping for faster feel with better stability.</li>
+            <li>Fix: YouTube live streams that disable seeking backward (no-DVR live) now apply delay correctly via the canvas frame-capture pipeline, since MSE <code class="text-cyan-400">timestampOffset</code> shifts would rebuffer against the pinned live edge.</li>
+          </ul>
+
+          <h3 class="text-lg text-white font-semibold font-['Space_Mono'] mt-6 mb-3">Timing and controls</h3>
+          <ul class="list-disc pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Fix: Toggling LagSync off now shows 0 ms immediately in the popup. Previously the popup kept displaying the last-applied delay (e.g. 180 ms) until it was closed and reopened, and as a side effect the next toggle-on skipped its countdown.</li>
+            <li>Fix: "Starts adjusting" countdown estimation is more accurate on YouTube/VOD by limiting seekable fallback to trim-blocked contexts.</li>
+            <li>Fix: Speed and max-buffer settings now apply immediately on first click (no stale value delay).</li>
+          </ul>
+
+          <h3 class="text-lg text-white font-semibold font-['Space_Mono'] mt-6 mb-3">Docs</h3>
+          <ul class="list-disc pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Added: Browser differences doc covering the per-browser pipeline choices (Chrome MSE vs Edge/Firefox canvas on Twitch, Firefox/Safari/Edge injection path, etc.).</li>
+            <li>Added: Detailed timing/mode behavior documentation, including the Prime Video Instant exception.</li>
+            <li>Added: Technique and site-type behavior map (DRM/live-edge/worker/blob/iframe/etc.).</li>
+          </ul>
+        </section>
+
+        <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
           <div id="v101" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
             <h2 class="text-2xl text-white font-bold font-['Space_Mono']">1.01</h2>
             <span class="text-xs text-slate-400 font-['Space_Mono'] uppercase tracking-widest">2026-04-06</span>

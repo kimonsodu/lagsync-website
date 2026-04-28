@@ -124,6 +124,7 @@ const galleryJson = JSON.stringify(gallery);
       if (!marqueeLink) return;
       const chromeUrl = 'https://chromewebstore.google.com/detail/lagsync-bluetooth-audio-f/ijhhkocgkagcfkoinilkjdcadljdjmaf';
       const firefoxUrl = 'https://addons.mozilla.org/en-US/firefox/addon/lagsync-bluetooth-audio-fix/';
+      const edgeUrl = 'https://microsoftedge.microsoft.com/addons/detail/lagsync-bluetooth-audio/ocigopodjjobggdnklngfaceeedlkbol';
       const ua = navigator.userAgent || '';
       const isFirefox = /firefox/i.test(ua) && !/seamonkey/i.test(ua);
       const isSafari = /safari/i.test(ua) && !/chrome|chromium|crios|android/i.test(ua);
@@ -131,7 +132,7 @@ const galleryJson = JSON.stringify(gallery);
       let href = chromeUrl;
       if (isSafari) href = '/#download';
       else if (isFirefox) href = firefoxUrl;
-      else if (isEdge) href = chromeUrl;
+      else if (isEdge) href = edgeUrl;
       marqueeLink.href = href;
       if (href === '/#download') {
         marqueeLink.removeAttribute('target');

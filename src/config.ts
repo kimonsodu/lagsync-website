@@ -28,8 +28,8 @@ export const BROWSERS = [
   {
     name: 'Edge',
     icon: '/browsers/edge.svg',
-    note: `v${VERSION} — Live`,
-    link: 'https://chromewebstore.google.com/detail/lagsync-bluetooth-audio-f/ijhhkocgkagcfkoinilkjdcadljdjmaf',
+    note: 'v1.2.1 — Live',
+    link: 'https://microsoftedge.microsoft.com/addons/detail/lagsync-bluetooth-audio/ocigopodjjobggdnklngfaceeedlkbol',
   },
   {
     name: 'Safari',

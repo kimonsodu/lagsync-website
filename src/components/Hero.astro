@@ -37,9 +37,11 @@ import { VERSION } from '../config';
         if (!install) return;
         const chromeUrl = 'https://chromewebstore.google.com/detail/lagsync-bluetooth-audio-f/ijhhkocgkagcfkoinilkjdcadljdjmaf';
         const firefoxUrl = 'https://addons.mozilla.org/en-US/firefox/addon/lagsync-bluetooth-audio-fix/';
+        const edgeUrl = 'https://microsoftedge.microsoft.com/addons/detail/lagsync-bluetooth-audio/ocigopodjjobggdnklngfaceeedlkbol';
         const ua = navigator.userAgent || '';
         const isFirefox = /firefox/i.test(ua) && !/seamonkey/i.test(ua);
         const isSafari = /safari/i.test(ua) && !/chrome|chromium|crios|android/i.test(ua);
+        const isEdge = /edg/i.test(ua);
         if (isSafari) {
           install.textContent = 'Coming soon';
           install.href = '/#download';
@@ -48,6 +50,11 @@ import { VERSION } from '../config';
         } else if (isFirefox) {
           install.textContent = 'Add to Firefox';
           install.href = firefoxUrl;
+          install.target = '_blank';
+          install.rel = 'noopener noreferrer';
+        } else if (isEdge) {
+          install.textContent = 'Add to Edge';
+          install.href = edgeUrl;
           install.target = '_blank';
           install.rel = 'noopener noreferrer';
         } else {
