@@ -1,89 +1,151 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
+
+const faqItems = [
+  {
+    category: 'Getting Started',
+    question: "What's a sane starting delay value?",
+    answer: `For Bluetooth, 150-250 ms is typical. AAC headphones (AirPods, most phones) usually land near 150-220 ms; aptX/LDAC closer to 80-150 ms; aptX Low Latency or LE Audio 40-80 ms; cheap USB BT dongles or multipoint can need 300-400 ms. Start at 180 ms and adjust in 20-50 ms steps.`,
+  },
+  {
+    category: 'Setup',
+    question: 'Nothing happens when I move the slider',
+    answer: `Walk through these in order: (1) the big toggle at the top of the popup must be on; (2) check Site Mode in Settings - <em>Only listed</em> / <em>Exclude listed</em> can keep LagSync out of the page; (3) reload the tab after enabling, since hooks install at <code class="text-cyan-400">document_start</code>; (4) iframe players intentionally disable trim. If <code class="text-cyan-400">mode: none</code> appears in stats view, the page exposes no pipeline LagSync can hook.`,
+  },
+  {
+    category: 'Playback',
+    question: 'Why does the popup say "Starts adjusting in ~Xs"?',
+    answer: `For <em>increases</em>, LagSync waits for already-buffered video to drain (or trims it, when allowed) before the new delayed segments reach the player. The countdown estimates when the new delay first becomes audible. <strong>Decreases and turning off are immediate.</strong> Trim-blocked sites (Netflix, Prime, no-DVR live, iframes) cannot shorten the wait.`,
+  },
+  {
+    category: 'Performance',
+    question: 'Stuttering or rebuffering after changing delay',
+    answer: `Drop one step in <strong>Delay increase speed</strong> (Instant -> Fast -> Balanced -> Gentle), or raise <strong>Max buffer ahead</strong> to 10s/20s. Lock the player's quality during testing. On Prime, Instant mode is intentionally a single hard-jump and may briefly stall once. If hardware acceleration is off, frame capture (canvas) will be CPU-heavy.`,
+  },
+  {
+    category: 'Playback',
+    question: 'Sync drifts over long playback',
+    answer: `Adaptive streams sometimes switch audio codecs (Opus/AAC on YouTube) or bitrates mid-playback, and the new track lines up slightly differently. Pin the player's quality in the gear menu so it does not re-pick mid-stream, or seek a few seconds back and forward to force the player to reinitialize. For Netflix, set a fixed quality in <em>Account -> Playback settings</em>.`,
+  },
+  {
+    category: 'Performance',
+    question: 'CPU shoots up when LagSync is on',
+    answer: `You are on the canvas pipeline (Twitch live, YouTube no-DVR live, Firefox blob streams, or any page that fell back to frame capture). Canvas redraws every frame and is more expensive than MSE. Lower resolution, hide chat, close background tabs, and confirm browser hardware acceleration is on.`,
+  },
+  {
+    category: 'Platforms',
+    question: 'Does it work on Netflix, Prime Video, Disney+?',
+    answer: `Yes. These are DRM and trim is blocked, so increases only kick in once the existing buffer drains. Start near 180 ms. On Prime, Auto-optimize sets <strong>Instant + 0s buffer</strong>. Set a fixed streaming quality in account settings and reload the player after changing extension settings.`,
+  },
+  {
+    category: 'Platforms',
+    question: 'YouTube live vs Twitch / Kick',
+    answer: `<strong>YouTube live with DVR</strong> behaves like VOD (MSE, trim allowed). <strong>No-DVR live</strong> uses canvas (higher CPU, trim blocked). <strong>Twitch and Kick</strong> are blob-backed live: worker-MSE on Chrome, canvas on Edge/Firefox by design. Use a 200-250 ms baseline for live and lock quality.`,
+  },
+  {
+    category: 'Platforms',
+    question: "Negative delay (audio-ahead) doesn't work on this site",
+    answer: `Negative delay uses the <strong>WebAudio</strong> path. Some DRM players do not allow WebAudio to tap encrypted audio. On those, negative video delay may only work through canvas, and on some DRM live players neither path works.`,
+  },
+  {
+    category: 'Playback',
+    question: 'When should I use Audio mode?',
+    answer: `Turn it on when <strong>audio arrives early</strong> instead of late - common with HDMI ARC/eARC soundbars, receivers with their own processing buffer, or Bluetooth transmitters that over-compensate. Video and audio delay values are stored separately.`,
+  },
+  {
+    category: 'Platforms',
+    question: 'Browser-specific quirks (Edge, Firefox, Safari)',
+    answer: `<strong>Edge:</strong> if you see zero delay across every site after an update, disable/re-enable the extension and reload the tab. <strong>Firefox:</strong> some builds lack <code class="text-cyan-400">requestVideoFrameCallback</code> and fall back to ~30 fps on canvas. <strong>Safari:</strong> <code class="text-cyan-400">OfflineAudioContext</code> is not available on every build, limiting negative-delay.`,
+  },
+  {
+    category: 'Setup',
+    question: "Keyboard shortcuts don't fire",
+    answer: `Enable shortcuts in Settings -> Keyboard shortcuts. Click into the input field, then press the actual combo (for example <code class="text-cyan-400">Ctrl+Shift+ArrowUp</code>). Some sites swallow keystrokes inside their player when it has focus.`,
+  },
+  {
+    category: 'Privacy',
+    question: 'Privacy - what data does LagSync collect?',
+    answer: `None is sent anywhere. Stats (total sync time, session count, top sites, delay distribution) are stored <strong>locally on this device only</strong>. No telemetry, no account, no server. Turn it off in Settings -> Privacy.`,
+  },
+  {
+    category: 'Reporting',
+    question: 'How do I file a useful bug report?',
+    answer: `Include browser + version, OS, site/content type, expected vs actual behavior, and whether reload reproduces it. Then run this in the affected tab console:
+    <pre class="mt-3 p-3 bg-black/50 border border-white/5 rounded text-xs text-slate-300 overflow-x-auto"><code>window.dispatchEvent(new CustomEvent('__btSyncCmd', { detail: JSON.stringify({ type: 'DIAGNOSE', msgId: 1 }) }));
+window.addEventListener('__btSyncResp', e => console.log(JSON.parse(JSON.stringify(e.detail))), { once: true });</code></pre>
+    <p class="text-sm text-slate-400 mt-3">The <code class="text-cyan-400">mode</code> field (<code class="text-cyan-400">canvas</code> / <code class="text-cyan-400">mse</code> / <code class="text-cyan-400">webaudio</code> / <code class="text-cyan-400">none</code>) tells us which pipeline picked you.</p>`,
+  },
+];
+
+const categories = ['All', ...new Set(faqItems.map((item) => item.category))];
 ---
 
 <Layout title="Help & Troubleshooting | LagSync"
   description="Common solutions for Bluetooth audio sync issues — drift, black screen fixes, and troubleshooting steps for LagSync users.">
   <main class="pt-32 pb-20 flex-grow">
-    <div class="container mx-auto px-6 max-w-4xl">
-      <h1 class="text-4xl font-bold text-white mb-4 font-['Space_Mono'] uppercase tracking-tight">Help <span class="text-cyan-500">Center</span></h1>
-      <p class="text-slate-400 mb-12">Common solutions for Bluetooth audio synchronization issues.</p>
+    <div class="container mx-auto px-4 sm:px-6 max-w-5xl">
+      <h1 class="text-3xl sm:text-4xl font-bold text-white mb-4 font-['Space_Mono'] uppercase tracking-tight">Help <span class="text-cyan-500">Center</span></h1>
+      <p class="text-slate-400 mb-8 sm:mb-10 text-sm sm:text-base">Common solutions for Bluetooth audio synchronization issues.</p>
 
-      <div class="grid gap-6">
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">What's a sane starting delay value?</h3>
-          <p class="text-sm text-slate-400">For Bluetooth, 150–250 ms is typical. AAC headphones (AirPods, most phones) usually land near 150–220 ms; aptX/LDAC closer to 80–150 ms; aptX Low Latency or LE Audio 40–80 ms; cheap USB BT dongles or multipoint can need 300–400 ms. Start at 180 ms and adjust in 20–50 ms steps — 20 ms is roughly the human threshold for noticing.</p>
+      <section class="rounded-2xl border border-white/10 bg-[#0f0f0f]/85 p-4 sm:p-6 mb-6 sm:mb-8">
+        <div class="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center mb-4 sm:mb-5">
+          <label for="faq-search" class="sr-only">Search help questions</label>
+          <input
+            id="faq-search"
+            type="search"
+            placeholder="Search the FAQ..."
+            class="w-full rounded-lg border border-white/15 bg-black/30 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/60"
+          />
+          <p id="faq-count" class="text-xs sm:text-sm text-slate-400 whitespace-nowrap">{faqItems.length} questions</p>
         </div>
 
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Nothing happens when I move the slider</h3>
-          <p class="text-sm text-slate-400">Walk through these in order: (1) the big toggle at the top of the popup must be on; (2) check Site Mode in Settings — <em>Only listed</em> / <em>Exclude listed</em> can keep LagSync out of the page; (3) reload the tab after enabling, since hooks install at <code class="text-cyan-400">document_start</code>; (4) iframe players intentionally disable trim. If <code class="text-cyan-400">mode: none</code> appears in stats view, the page exposes no pipeline LagSync can hook.</p>
+        <div class="flex flex-wrap gap-2 mb-5" id="faq-categories" role="tablist" aria-label="FAQ categories">
+          {categories.map((category, index) => (
+            <button
+              type="button"
+              class:list={[
+                'faq-category px-3 py-1.5 rounded-full border text-xs sm:text-sm transition-colors',
+                index === 0
+                  ? 'border-cyan-400/40 bg-cyan-500/15 text-cyan-200'
+                  : 'border-white/15 bg-white/0 text-slate-300 hover:text-white hover:border-white/30',
+              ]}
+              data-category={category}
+              aria-pressed={index === 0 ? 'true' : 'false'}
+            >
+              {category}
+            </button>
+          ))}
         </div>
 
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Why does the popup say "Starts adjusting in ~Xs"?</h3>
-          <p class="text-sm text-slate-400">For <em>increases</em>, LagSync waits for already-buffered video to drain (or trims it, when allowed) before the new delayed segments reach the player. The countdown estimates when the new delay first becomes audible. <strong>Decreases and turning off are immediate.</strong> Trim-blocked sites (Netflix, Prime, no-DVR live, iframes) can't shorten the wait — only the buffer drain controls when it begins.</p>
+        <div id="faq-list" class="grid gap-3 sm:gap-4">
+          {faqItems.map((item, idx) => (
+            <details
+              class="faq-item rounded-xl border border-white/10 bg-[#131313] open:border-cyan-400/25"
+              data-category={item.category}
+              data-question={item.question.toLowerCase()}
+              data-answer={item.answer.toLowerCase()}
+              open={idx === 0}
+            >
+              <summary class="list-none cursor-pointer px-4 py-4 sm:px-5 sm:py-4">
+                <div class="flex gap-3 items-start">
+                  <span class="mt-1 inline-block min-w-0">
+                    <span class="inline-block px-2 py-0.5 rounded bg-white/5 text-[11px] text-cyan-200 mb-2">{item.category}</span>
+                    <h3 class="text-sm sm:text-base text-white font-semibold leading-snug font-['Space_Mono'] break-words">{item.question}</h3>
+                  </span>
+                  <span class="ml-auto text-cyan-300 text-lg leading-none transition-transform faq-caret">+</span>
+                </div>
+              </summary>
+              <div class="px-4 pb-4 sm:px-5 sm:pb-5">
+                <div class="h-px bg-white/8 mb-3"></div>
+                <div class="text-sm text-slate-300 leading-relaxed break-words" set:html={item.answer} />
+              </div>
+            </details>
+          ))}
         </div>
 
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Stuttering or rebuffering after changing delay</h3>
-          <p class="text-sm text-slate-400">Drop one step in <strong>Delay increase speed</strong> (Instant → Fast → Balanced → Gentle), or raise <strong>Max buffer ahead</strong> to 10s/20s. Lock the player's quality during testing — adaptive bitrate switches mid-ramp look like a LagSync stutter but aren't. On Prime, Instant mode is intentionally a single hard-jump and may briefly stall once. If hardware acceleration is off, frame capture (canvas) will be CPU-heavy — re-enable it.</p>
-        </div>
-
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Sync drifts over long playback</h3>
-          <p class="text-sm text-slate-400">Adaptive streams sometimes switch audio codecs (Opus ↔ AAC on YouTube) or bitrates mid-playback, and the new track lines up slightly differently. Pin the player's quality in the gear menu so it doesn't re-pick mid-stream, or seek a few seconds back and forward to force the player to reinitialise. For Netflix, set a fixed quality in <em>Account → Playback settings</em>.</p>
-        </div>
-
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">CPU shoots up when LagSync is on</h3>
-          <p class="text-sm text-slate-400">You're on the canvas pipeline (Twitch live, YouTube no-DVR live, Firefox blob streams, or any page that fell back to frame capture). Canvas redraws every frame and is more expensive than MSE. Lower the player resolution, hide chat, close background tabs, and confirm browser hardware acceleration is on.</p>
-        </div>
-
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Does it work on Netflix, Prime Video, Disney+?</h3>
-          <p class="text-sm text-slate-400">Yes. These are DRM and trim is blocked, so increases only kick in once the existing buffer drains. Start near 180 ms. On Prime, Auto-optimize sets <strong>Instant + 0s buffer</strong> — Prime's player rebuffers when offsets ramp, so a single hard jump is the only reliable path. Set a fixed streaming quality in your account settings to reduce drift, and reload the player after changing extension settings.</p>
-        </div>
-
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">YouTube live vs Twitch / Kick</h3>
-          <p class="text-sm text-slate-400"><strong>YouTube live with DVR</strong> behaves like VOD (MSE, trim allowed). <strong>No-DVR live</strong> uses the canvas pipeline — higher CPU is expected, and trim is blocked. <strong>Twitch and Kick</strong> are blob-backed live: worker-MSE on Chrome, canvas on Edge/Firefox by design. Use a 200–250 ms baseline for live, lock to a fixed quality, and hide chat if CPU is the bottleneck.</p>
-        </div>
-
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Negative delay (audio-ahead) doesn't work on this site</h3>
-          <p class="text-sm text-slate-400">Negative delay uses the <strong>WebAudio</strong> path. Some DRM players don't let WebAudio tap the audio (encrypted media exception). On those, you can apply negative video delay only via the canvas pipeline if it's available — and on a few DRM live players, neither path works. Most common on Prime live events, Apple TV+ on certain Macs, and some regional broadcasters.</p>
-        </div>
-
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">When should I use Audio mode?</h3>
-          <p class="text-sm text-slate-400">Turn it on when <strong>audio arrives early</strong> instead of late — common with HDMI ARC/eARC soundbars, receivers with their own processing buffer, or Bluetooth transmitters that over-compensate. Video and audio delay values are stored separately, so toggling Audio mode doesn't lose your other number. Presets are kept in two lists in Settings.</p>
-        </div>
-
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Browser-specific quirks (Edge, Firefox, Safari)</h3>
-          <p class="text-sm text-slate-400"><strong>Edge:</strong> if you ever see zero delay across every site after an update, disable/re-enable the extension and reload the tab. Twitch on Edge runs on the canvas pipeline by design. <strong>Firefox:</strong> some builds lack <code class="text-cyan-400">requestVideoFrameCallback</code> and fall back to ~30 fps — slightly choppier on canvas, not a bug. <strong>Safari:</strong> <code class="text-cyan-400">OfflineAudioContext</code> isn't available on every build, which limits negative-delay. Positive video delay still works.</p>
-        </div>
-
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Keyboard shortcuts don't fire</h3>
-          <p class="text-sm text-slate-400">"Enable shortcuts" must be on in Settings → Keyboard shortcuts. Click into the input field, then press the actual combo (e.g. <code class="text-cyan-400">Ctrl+Shift+ArrowUp</code>). Some sites swallow keystrokes inside their player when it has focus — click outside the player frame and try again. Step size is in milliseconds (1–200); default 10 is a reasonable start.</p>
-        </div>
-
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">Privacy — what data does LagSync collect?</h3>
-          <p class="text-sm text-slate-400">None is sent anywhere. Stats (total sync time, session count, top sites, delay distribution) are stored <strong>locally on this device only</strong>. No telemetry, no account, no server. Turn it off in Settings → Privacy — pause-only (keep existing data) or pause-and-delete. Clearing browser data for the extension also clears stats.</p>
-        </div>
-
-        <div class="p-6 bg-[#111] border border-white/5 rounded-xl">
-          <h3 class="text-white font-bold mb-2 font-['Space_Mono']">How do I file a useful bug report?</h3>
-          <p class="text-sm text-slate-400">Include browser + version, OS, site and content type (e.g. "Twitch live, no DVR"), what you expected vs what happened, and whether a tab reload reproduces it. Then run the diagnose dump in the page console on the affected tab:</p>
-          <pre class="mt-3 p-3 bg-black/50 border border-white/5 rounded text-xs text-slate-300 overflow-x-auto"><code>window.dispatchEvent(new CustomEvent('__btSyncCmd', &lbrace; detail: JSON.stringify(&lbrace; type: 'DIAGNOSE', msgId: 1 &rbrace;) &rbrace;));
-window.addEventListener('__btSyncResp', e =&gt; console.log(JSON.parse(JSON.stringify(e.detail))), &lbrace; once: true &rbrace;);</code></pre>
-          <p class="text-sm text-slate-400 mt-3">The <code class="text-cyan-400">mode</code> field (<code class="text-cyan-400">canvas</code> / <code class="text-cyan-400">mse</code> / <code class="text-cyan-400">webaudio</code> / <code class="text-cyan-400">none</code>) tells us which pipeline picked you.</p>
-        </div>
-      </div>
+        <p id="faq-empty" class="hidden text-sm text-slate-400 py-5">No matching results. Try another keyword or switch category.</p>
+      </section>
 
       <div class="mt-12 p-8 bg-cyan-500/5 border border-cyan-500/20 rounded-2xl text-center">
         <h3 class="text-white font-bold mb-2">Still need help?</h3>
@@ -92,5 +154,68 @@ window.addEventListener('__btSyncResp', e =&gt; console.log(JSON.parse(JSON.stri
       </div>
     </div>
   </main>
+  <script>
+    const searchInput = document.querySelector('#faq-search');
+    const categoryButtons = Array.from(document.querySelectorAll('.faq-category'));
+    const faqItems = Array.from(document.querySelectorAll('.faq-item'));
+    const faqCount = document.querySelector('#faq-count');
+    const faqEmpty = document.querySelector('#faq-empty');
+
+    let activeCategory = 'All';
+
+    const updateCarets = () => {
+      faqItems.forEach((item) => {
+        const caret = item.querySelector('.faq-caret');
+        if (!caret) return;
+        caret.textContent = item.open ? '-' : '+';
+      });
+    };
+
+    const updateFaq = () => {
+      const term = (searchInput?.value || '').trim().toLowerCase();
+      let visibleCount = 0;
+
+      faqItems.forEach((item) => {
+        const itemCategory = item.getAttribute('data-category') || '';
+        const text = `${item.getAttribute('data-question') || ''} ${item.getAttribute('data-answer') || ''}`;
+        const categoryMatch = activeCategory === 'All' || itemCategory === activeCategory;
+        const searchMatch = !term || text.includes(term);
+        const show = categoryMatch && searchMatch;
+
+        item.classList.toggle('hidden', !show);
+        if (show) visibleCount += 1;
+      });
+
+      if (faqCount) {
+        faqCount.textContent = `${visibleCount} question${visibleCount === 1 ? '' : 's'}`;
+      }
+
+      if (faqEmpty) {
+        faqEmpty.classList.toggle('hidden', visibleCount > 0);
+      }
+    };
+
+    categoryButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        activeCategory = button.getAttribute('data-category') || 'All';
+        categoryButtons.forEach((otherButton) => {
+          const isActive = otherButton === button;
+          otherButton.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          otherButton.classList.toggle('border-cyan-400/40', isActive);
+          otherButton.classList.toggle('bg-cyan-500/15', isActive);
+          otherButton.classList.toggle('text-cyan-200', isActive);
+          otherButton.classList.toggle('border-white/15', !isActive);
+          otherButton.classList.toggle('text-slate-300', !isActive);
+        });
+        updateFaq();
+      });
+    });
+
+    searchInput?.addEventListener('input', updateFaq);
+    faqItems.forEach((item) => item.addEventListener('toggle', updateCarets));
+
+    updateFaq();
+    updateCarets();
+  </script>
   <Footer />
 </Layout>

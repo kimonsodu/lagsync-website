@@ -1,9 +1,5 @@
 ---
 import '../styles/global.css';
-import '@fontsource/space-mono/latin-400.css';
-import '@fontsource/space-mono/latin-700.css';
-import '@fontsource/ibm-plex-sans/latin-300.css';
-import '@fontsource/ibm-plex-sans/latin-400.css';
 
 
 interface Props {
@@ -45,6 +41,9 @@ const jsonLd = dateModified
     <link rel="icon" type="image/png" sizes="48x48" href="/icon48.png" />
     <link rel="apple-touch-icon" sizes="128x128" href="/icon128.png" />
     <link rel="alternate" type="application/rss+xml" title="LagSync Releases Feed" href="/rss.xml" />
+    <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
     <meta name="description" content={description} />
 
