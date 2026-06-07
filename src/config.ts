@@ -5,7 +5,7 @@
 
 export const SITE = {
   title: 'LagSync - Perfect Bluetooth Audio Sync for Every Browser',
-  description: 'Fix Bluetooth audio delay with LagSync — a lightweight browser extension for Chrome, Firefox, Edge, and Brave that restores lip-sync quickly.',
+  description: 'Fix Bluetooth audio delay with LagSync — a lightweight browser extension for Chrome, Firefox, Edge, Brave, and Safari that restores lip-sync quickly.',
   image: '/images/marquee.png',
   url: 'https://lagsync.com',
 };
@@ -34,8 +34,8 @@ export const BROWSERS = [
   {
     name: 'Safari',
     icon: '/browsers/safari.svg',
-    note: 'Coming Soon',
-    link: '#',
+    note: `v${VERSION} — Live`,
+    link: 'https://apps.apple.com/app/id6766511020',
   },
   {
     name: 'Brave',
