@@ -50,7 +50,7 @@ const galleryJson = JSON.stringify(gallery);
   </div>
 
   <!-- Lightbox / viewer -->
-  <div id="ls-lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-6">
+  <div id="ls-lightbox" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black/80 p-6">
     <button id="ls-close" class="absolute top-6 right-6 text-white text-3xl leading-none" onclick="closeLightbox()" aria-label="Close">×</button>
     <button id="ls-prev" class="absolute left-6 text-white text-4xl leading-none" onclick="prevImage()" aria-label="Previous">‹</button>
     <div class="max-w-[90vw] max-h-[80vh] flex items-center justify-center">
