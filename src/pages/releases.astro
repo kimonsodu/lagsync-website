@@ -14,6 +14,25 @@ import Footer from '../components/Footer.astro';
 
       <div class="space-y-8">
         <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
+          <div id="v122" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+            <h2 class="text-2xl text-white font-bold font-['Space_Mono']">1.2.2</h2>
+            <span class="text-xs text-slate-400 font-['Space_Mono'] uppercase tracking-widest">2026-05-28</span>
+          </div>
+
+          <h3 class="text-lg text-white font-semibold font-['Space_Mono'] mt-2 mb-3">Safari (macOS)</h3>
+          <ul class="list-disc pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Feature: Netflix now works on Safari. Delay applies via the MSE path, same as Chrome.</li>
+            <li>Fix: Twitch delay now works on Safari, and can be changed mid-stream without reloading the tab.</li>
+            <li>Removed support: Prime Video is <strong>not supported on Safari</strong>. Safari runs Prime on a FairPlay-protected native HLS pipeline where none of the delay paths LagSync uses on other browsers are viable. Chrome, Edge, and Firefox are unaffected.</li>
+          </ul>
+
+          <h3 class="text-lg text-white font-semibold font-['Space_Mono'] mt-6 mb-3">Donations</h3>
+          <ul class="list-disc pl-5 space-y-2 text-slate-300 text-sm leading-relaxed">
+            <li>Improvement: Donation prompt is now surfaced more prominently as you accumulate usage — quieter for brand-new users, more visible after the extension has actually helped on real sessions. Tied to local usage stats; nothing about which sites you watch is sent anywhere (still 100% on-device, as before).</li>
+          </ul>
+        </section>
+
+        <section class="p-8 bg-[#111] border border-white/5 rounded-2xl">
           <div id="v121" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
             <h2 class="text-2xl text-white font-bold font-['Space_Mono']">1.2.1</h2>
             <span class="text-xs text-slate-400 font-['Space_Mono'] uppercase tracking-widest">2026-04-28</span>

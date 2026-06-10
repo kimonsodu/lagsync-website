@@ -4,6 +4,13 @@ const SITE = 'https://lagsync.com';
 
 const items = [
   {
+    title: 'LagSync 1.2.2 Released',
+    link: `${SITE}/releases#v122`,
+    pubDate: 'Thu, 28 May 2026 00:00:00 GMT',
+    description:
+      'Safari: Netflix now works (MSE path) and Twitch delay applies mid-stream without reload. Prime Video is no longer supported on Safari (FairPlay native HLS). Donation prompt surfaces more prominently as usage accumulates, still 100% on-device.'
+  },
+  {
     title: 'LagSync 1.2.1 Released',
     link: `${SITE}/releases#v121`,
     pubDate: 'Tue, 28 Apr 2026 00:00:00 GMT',
@@ -33,7 +40,7 @@ export const GET: APIRoute = () => {
     `  <link>${SITE}/releases</link>\n` +
     `  <description>Release and changelog updates for LagSync.</description>\n` +
     `  <language>en-us</language>\n` +
-      `  <lastBuildDate>Tue, 28 Apr 2026 00:00:00 GMT</lastBuildDate>\n` +
+      `  <lastBuildDate>Thu, 28 May 2026 00:00:00 GMT</lastBuildDate>\n` +
     items
       .map(
         (item) =>
