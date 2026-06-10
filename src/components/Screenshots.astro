@@ -23,11 +23,11 @@ const galleryJson = JSON.stringify(gallery);
     </div>
   ) : null}
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+  <div id="ls-gallery" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start" data-gallery={galleryJson}>
     <!-- Large promo tile / featured image -->
     {gallery && gallery.length > 0 ? (
       <div class="md:col-span-1">
-        <div class="bg-[#0b0b0b] border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform flex flex-col items-stretch" onclick={`openLightbox(0)`} role="button" aria-label="Open featured image">
+        <div class="bg-[#0b0b0b] border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform flex flex-col items-stretch" data-lightbox-index="0" role="button" aria-label="Open featured image">
           <div class="flex items-center justify-center bg-[#050505] p-4">
             <img src={gallery[0].src} alt={gallery[0].alt} class="max-h-[420px] w-auto max-w-full object-contain" />
           </div>
@@ -39,7 +39,7 @@ const galleryJson = JSON.stringify(gallery);
     <!-- Grid of screenshots (responsive) -->
     <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
       {gallery.slice(1).map((img, i) => (
-        <figure class="bg-[#0b0b0b] border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-transform" onclick={`openLightbox(${i + 1})`} role="button" aria-label={`Open ${img.caption}`}>
+        <figure class="bg-[#0b0b0b] border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:scale-[1.01] transition-transform" data-lightbox-index={i + 1} role="button" aria-label={`Open ${img.caption}`}>
           <div class="flex items-center justify-center bg-[#050505] p-2">
             <img src={img.src} alt={img.alt} loading="lazy" class="max-h-[320px] w-auto max-w-full object-contain" />
           </div>
@@ -51,71 +51,34 @@ const galleryJson = JSON.stringify(gallery);
 
   <!-- Lightbox / viewer -->
   <div id="ls-lightbox" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black/80 p-6">
-    <button id="ls-close" class="absolute top-6 right-6 text-white text-3xl leading-none" onclick="closeLightbox()" aria-label="Close">×</button>
-    <button id="ls-prev" class="absolute left-6 text-white text-4xl leading-none" onclick="prevImage()" aria-label="Previous">‹</button>
+    <button id="ls-close" class="absolute top-6 right-6 text-white text-3xl leading-none" aria-label="Close">×</button>
+    <button id="ls-prev" class="absolute left-6 text-white text-4xl leading-none" aria-label="Previous">‹</button>
     <div class="max-w-[90vw] max-h-[80vh] flex items-center justify-center">
       <img id="ls-img" src="" alt="" class="max-w-full max-h-full object-contain rounded-lg shadow-lg" />
     </div>
     <div id="ls-caption" class="text-slate-300 mt-4 text-center"></div>
-    <button id="ls-next" class="absolute right-6 text-white text-4xl leading-none" onclick="nextImage()" aria-label="Next">›</button>
+    <button id="ls-next" class="absolute right-6 text-white text-4xl leading-none" aria-label="Next">›</button>
   </div>
 
-  <script type="application/json" id="ls-gallery-data" set:html={galleryJson}></script>
   <script>
-    (function(){
-      const dataEl = document.getElementById('ls-gallery-data');
-      const gallery = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
-      window.__LS_GALLERY = gallery;
-      window.__LS_INDEX = 0;
+    import { Lightbox, readItems } from '../scripts/gallery';
 
-      window.openLightbox = function(i) {
-        const lb = document.getElementById('ls-lightbox');
-        const imgEl = document.getElementById('ls-img');
-        const cap = document.getElementById('ls-caption');
-        const item = gallery[i];
-        if (!item) return;
-        window.__LS_INDEX = i;
-        imgEl.src = item.src;
-        imgEl.alt = item.alt || '';
-        cap.textContent = item.caption || '';
-        lb.classList.remove('hidden');
-        lb.classList.add('flex');
-        document.body.style.overflow = 'hidden';
-      };
+    const root = document.getElementById('ls-gallery');
+    const lb = document.getElementById('ls-lightbox');
+    const img = document.getElementById('ls-img');
+    const cap = document.getElementById('ls-caption');
 
-      window.closeLightbox = function() {
-        const lb = document.getElementById('ls-lightbox');
-        lb.classList.add('hidden');
-        lb.classList.remove('flex');
-        document.body.style.overflow = '';
-      };
-
-      window.prevImage = function() {
-        window.__LS_INDEX = (window.__LS_INDEX - 1 + gallery.length) % gallery.length;
-        window.openLightbox(window.__LS_INDEX);
-      };
-
-      window.nextImage = function() {
-        window.__LS_INDEX = (window.__LS_INDEX + 1) % gallery.length;
-        window.openLightbox(window.__LS_INDEX);
-      };
-
-      // Close on backdrop click
-      document.addEventListener('click', (e) => {
-        const lb = document.getElementById('ls-lightbox');
-        if (!lb) return;
-        if (!lb.classList.contains('hidden') && e.target === lb) window.closeLightbox();
+    if (root && lb && img && cap) {
+      new Lightbox(readItems(root, 'gallery'), {
+        root: lb,
+        img: img as HTMLImageElement,
+        caption: cap,
+        triggerScope: root,
+        prevBtn: document.getElementById('ls-prev'),
+        nextBtn: document.getElementById('ls-next'),
+        closeBtn: document.getElementById('ls-close'),
       });
-
-      // Keyboard navigation
-      document.addEventListener('keydown', (e) => {
-        const lb = document.getElementById('ls-lightbox');
-        if (!lb || lb.classList.contains('hidden')) return;
-        if (e.key === 'Escape') window.closeLightbox();
-        if (e.key === 'ArrowLeft') window.prevImage();
-        if (e.key === 'ArrowRight') window.nextImage();
-      });
-    })();
+    }
   </script>
 
   <script>

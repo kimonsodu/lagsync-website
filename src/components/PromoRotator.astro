@@ -10,7 +10,7 @@ const slidesJson = JSON.stringify(slides);
 ---
 
 <div class="mt-6 flex justify-center px-2 sm:px-4">
-  <div class="w-full max-w-3xl bg-[#0b0b0b] border border-white/5 rounded-2xl p-2 sm:p-4 flex items-center gap-2 sm:gap-4">
+  <div id="pr-root" data-slides={slidesJson} class="w-full max-w-3xl bg-[#0b0b0b] border border-white/5 rounded-2xl p-2 sm:p-4 flex items-center gap-2 sm:gap-4">
     <button id="pr-prev" class="text-white/80 text-xl sm:text-2xl px-2 sm:px-3 py-2 rounded hover:bg-white/5 flex-shrink-0">‹</button>
     <a id="pr-link" href={slides[0].link || slides[0].src} target="_blank" rel="noopener noreferrer" class="flex-1 min-w-0">
       <div class="rounded-lg overflow-hidden bg-[#050505] flex items-center justify-center pr-frame">
@@ -22,50 +22,25 @@ const slidesJson = JSON.stringify(slides);
   </div>
 </div>
 
-<script type="application/json" id="pr-data" set:html={slidesJson}></script>
 <script>
-  (function(){
-    const dataEl = document.getElementById('pr-data');
-    const slides = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
-    window.__PR_SLIDES = slides;
-    let __PR_INDEX = 0;
+  import { Carousel, readItems } from '../scripts/gallery';
 
-    function el(id){ return document.getElementById(id); }
-    const imgEl = el('pr-img');
-    const capEl = el('pr-caption');
-    const linkEl = el('pr-link');
-    const nextBtn = el('pr-next');
-    const prevBtn = el('pr-prev');
+  const root = document.getElementById('pr-root');
+  const img = document.getElementById('pr-img');
+  const cap = document.getElementById('pr-caption');
+  const link = document.getElementById('pr-link');
 
-    if (!imgEl || !capEl || !linkEl) return;
-
-    function render(i){
-      const s = slides[i];
-      if (!s) return;
-      imgEl.src = s.src;
-      imgEl.alt = s.alt || '';
-      capEl.textContent = s.caption || '';
-      linkEl.href = s.link || s.src;
-    }
-
-    function next(){ __PR_INDEX = (__PR_INDEX + 1) % slides.length; render(__PR_INDEX); }
-    function prev(){ __PR_INDEX = (__PR_INDEX - 1 + slides.length) % slides.length; render(__PR_INDEX); }
-
-    nextBtn?.addEventListener('click', () => { next(); resetTimer(); });
-    prevBtn?.addEventListener('click', () => { prev(); resetTimer(); });
-
-    let timer = setInterval(next, 5000);
-    function resetTimer(){ clearInterval(timer); timer = setInterval(next, 5000); }
-
-    // Pause on hover
-    const container = imgEl.closest('div');
-    if (container) {
-      container.addEventListener('mouseenter', () => clearInterval(timer));
-      container.addEventListener('mouseleave', () => { resetTimer(); });
-    }
-
-    render(0);
-  })();
+  if (root && img && cap && link) {
+    new Carousel(readItems(root, 'slides'), {
+      img: img as HTMLImageElement,
+      caption: cap,
+      link: link as HTMLAnchorElement,
+      prevBtn: document.getElementById('pr-prev'),
+      nextBtn: document.getElementById('pr-next'),
+      hoverTarget: root,
+      intervalMs: 5000,
+    });
+  }
 </script>
 
 <style>
